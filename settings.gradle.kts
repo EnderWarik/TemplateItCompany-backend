@@ -1,0 +1,1 @@
+rootProject.name = "ru.itcompany.it-ompanytemplate-landing-lc-appeal-backend"
