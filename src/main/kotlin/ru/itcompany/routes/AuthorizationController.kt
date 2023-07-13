@@ -8,6 +8,7 @@ import io.ktor.server.routing.*
 fun Route.authorizationController() {
 
     post("/login") {
+
         call.respondText("Hello World!")
     }
 

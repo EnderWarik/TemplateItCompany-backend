@@ -1,0 +1,1 @@
+create type status_appeal as enum ('Pending review', 'Reviewed', 'Pending response', 'Closed');

@@ -4,15 +4,18 @@ import com.zaxxer.hikari.*
 import io.ktor.server.config.*
 import kotlinx.coroutines.*
 import org.flywaydb.core.Flyway
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.*
-import org.jetbrains.exposed.sql.transactions.experimental.*
+import org.ktorm.database.Database
+import org.ktorm.dsl.from
+import org.ktorm.dsl.select
+
 import ru.itcompany.config.ConfigHandler
+import ru.itcompany.models.Users
 import java.io.*
 
-object DatabaseFactory {
+object DatabaseFactory{
+    private lateinit var database:Database
+    private lateinit var hikariDataSource:HikariDataSource
     fun init(config: ApplicationConfig) {
-        val dataSource = config.property("storage.dataSource").getString()
         val password = config.property("storage.password").getString()
         val user = config.property("storage.user").getString()
         val jdbcURL = " jdbc:postgresql://"+ config.property("storage.host").getString() +
@@ -22,26 +25,23 @@ object DatabaseFactory {
                 (config.propertyOrNull("storage.dbFilePath")?.getString()?.let {
                     File(it).canonicalFile.absolutePath
                 } ?: "")
-       val database = createHikariDataSource(
+        hikariDataSource=createHikariDataSource(
         url = jdbcURL,
-        dataSource = dataSource,
         dbPassword = password,
         dbUser = user
         )
-       Database.connect(database)
+        database = Database.connect(hikariDataSource)
 
-        val flyway = Flyway.configure().dataSource(database).load()
 
-        flyway.migrate()
+
     }
 
     private fun createHikariDataSource(
         url: String,
-        dataSource: String,
         dbPassword: String,
         dbUser: String
     ) = HikariDataSource(HikariConfig().apply {
-        dataSourceClassName = dataSource
+
         jdbcUrl = url
         password = dbPassword
         username = dbUser
@@ -51,4 +51,13 @@ object DatabaseFactory {
         schema = "public"
         validate()
     })
+
+    fun migrate() {
+        val flyway = Flyway.configure().cleanDisabled(false).dataSource(hikariDataSource).load()
+        flyway.migrate()
+    }
+
+    fun getDataBase():Database {
+       return database
+    }
 }

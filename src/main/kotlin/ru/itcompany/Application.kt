@@ -10,6 +10,7 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
     DatabaseFactory.init(environment.config)
+    DatabaseFactory.migrate()
     embeddedServer(
         CIO,
         port = ConfigHandler.getPort(environment.config) ?: 8080 ,

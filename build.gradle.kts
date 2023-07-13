@@ -5,7 +5,7 @@ val postgres_version: String by project
 val flyway_core_version: String by project
 val HikariCP_version: String by project
 val h2_version: String by project
-val exposed_version: String by project
+val ktorm_version: String by project
 plugins {
     kotlin("jvm") version "1.8.22"
     id("io.ktor.plugin") version "2.3.2"
@@ -24,7 +24,6 @@ application {
 }
 
 repositories {
-
     mavenCentral()
 }
 
@@ -41,14 +40,15 @@ dependencies {
     implementation("org.postgresql:postgresql:$postgres_version")
     implementation("com.zaxxer:HikariCP:$HikariCP_version")
     implementation("org.flywaydb:flyway-core:$flyway_core_version")
-    implementation("com.h2database:h2:$h2_version")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.ktorm:ktorm-core:${ktorm_version}")
+
+
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
-
+//   implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+//    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+//    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
 flyway {
     url = System.getenv("DB_URL")
     user = System.getenv("DB_USER")
