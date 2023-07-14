@@ -1,4 +1,4 @@
-package ru.itcompany.plugins
+package ru.itcompany.configurations
 
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*

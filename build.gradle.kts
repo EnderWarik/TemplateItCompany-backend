@@ -41,8 +41,8 @@ dependencies {
     implementation("com.zaxxer:HikariCP:$HikariCP_version")
     implementation("org.flywaydb:flyway-core:$flyway_core_version")
     implementation("org.ktorm:ktorm-core:${ktorm_version}")
-
-
+    implementation("org.mindrot:jbcrypt:0.4")
+    implementation("org.ktorm:ktorm-support-postgresql:${ktorm_version}")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

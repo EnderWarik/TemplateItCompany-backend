@@ -1,31 +1,26 @@
-package ru.itcompany
+package ru.itcompany.db
 
 import com.zaxxer.hikari.*
-import io.ktor.server.config.*
-import kotlinx.coroutines.*
 import org.flywaydb.core.Flyway
 import org.ktorm.database.Database
-import org.ktorm.dsl.from
-import org.ktorm.dsl.select
 
 import ru.itcompany.config.ConfigHandler
-import ru.itcompany.models.Users
 import java.io.*
 
 object DatabaseFactory{
     private lateinit var database:Database
     private lateinit var hikariDataSource:HikariDataSource
-    fun init(config: ApplicationConfig) {
-        val password = config.property("storage.password").getString()
-        val user = config.property("storage.user").getString()
-        val jdbcURL = " jdbc:postgresql://"+ config.property("storage.host").getString() +
+    fun init() {
+        val password = ConfigHandler.getString("storage.password")
+        val user = ConfigHandler.getString("storage.user")
+        val jdbcURL = " jdbc:postgresql://"+ ConfigHandler.getString("storage.host") +
                 ":" +
-                config.property("storage.port").getString() +
+                ConfigHandler.getString("storage.port") +
                 "/IT_company"
-                (config.propertyOrNull("storage.dbFilePath")?.getString()?.let {
+                (ConfigHandler.getStringOrNull("storage.dbFilePath")?.let {
                     File(it).canonicalFile.absolutePath
                 } ?: "")
-        hikariDataSource=createHikariDataSource(
+        hikariDataSource = createHikariDataSource(
         url = jdbcURL,
         dbPassword = password,
         dbUser = user
@@ -53,7 +48,7 @@ object DatabaseFactory{
     })
 
     fun migrate() {
-        val flyway = Flyway.configure().cleanDisabled(false).dataSource(hikariDataSource).load()
+        val flyway = Flyway.configure().dataSource(hikariDataSource).load()
         flyway.migrate()
     }
 

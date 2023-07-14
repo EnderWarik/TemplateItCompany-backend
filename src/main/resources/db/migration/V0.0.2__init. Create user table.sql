@@ -1,6 +1,7 @@
 CREATE TABLE users(
      id BIGSERIAL NOT NULL PRIMARY KEY,
-     email varchar(20) NOT NULL,
+     email varchar(20) UNIQUE NOT NULL,
+     password varchar(20) NOT NULL,
      role user_role  NOT NULL,
      first_name varchar(20) NOT NULL,
      last_name  varchar(20) NOT NULL,
