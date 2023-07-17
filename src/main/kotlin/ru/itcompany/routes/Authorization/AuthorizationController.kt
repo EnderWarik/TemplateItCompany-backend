@@ -20,21 +20,23 @@ import java.util.*
 
 fun Route.authorizationController(config: ApplicationConfig?) {
     val service: UserService = UserService()
+    route("/users")
+    {
+        authenticate("auth-jwt") {
+            post("/auth")
+            {
 
-    authenticate("auth-jwt") {
-        post("/auth")
-        {
+            }
 
         }
-
-    }
-    post("/login") {
-        service.loginUser(
-            UserMapper.toLoginArgument(
-                call.receive<LoginUserDto>()
-            )
-        ) ?.let {
+        post("/login") {
+            service.loginUser(
+                UserMapper.toLoginArgument(
+                    call.receive<LoginUserDto>()
+                )
+            ) ?.let {
                 call.respond(hashMapOf("token" to it))
             } ?: call.respond(HttpStatusCode.Unauthorized, "Unauthorized")
+        }
     }
 }
