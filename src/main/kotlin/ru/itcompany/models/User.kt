@@ -9,18 +9,20 @@ import org.ktorm.schema.long
 import org.ktorm.schema.varchar
 import ru.itcompany.models.enum.UserRoleEnum
 
+
 interface  User : Entity<User> {
+    companion object : Entity.Factory<User>()
     val id: Long
-    val email: String
-    val password: String
-    val role: UserRoleEnum
-    val firstName: String
-    val lastName: String
-    val thirdName: String?
-    val address: String?
-    val phoneNumber: String?
-    val inn: String?
-    val organizationName: String?
+    var email: String
+    var password: String
+    var role: UserRoleEnum
+    var firstName: String
+    var lastName: String
+    var thirdName: String?
+    var address: String?
+    var phoneNumber: String?
+    var inn: String?
+    var organizationName: String?
 }
 val Database.users get() = this.sequenceOf(Users)
 object Users : Table<User>("users") {

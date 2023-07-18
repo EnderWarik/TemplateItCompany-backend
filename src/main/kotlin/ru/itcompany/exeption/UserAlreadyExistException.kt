@@ -2,7 +2,7 @@ package ru.itcompany.exeption
 
 import java.util.*
 
-class UserNotFoundException(
+class UserAlreadyExistException(
     override val message: String? = null,
     override val cause: Throwable? = null
 ) : UserException(message,cause)

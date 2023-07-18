@@ -1,7 +1,5 @@
 package ru.itcompany.service.user.argument
 
-import ru.itcompany.routes.Authorization.dto.LoginUserDto
-
 class UserAccessArgument private constructor(
     var email: String,
     var password: String

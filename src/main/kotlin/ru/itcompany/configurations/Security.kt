@@ -2,14 +2,11 @@ package ru.itcompany.configurations
 
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
-import ru.itcompany.config.ConfigHandler
-import ru.itcompany.config.JwtConfig
-import ru.itcompany.config.JwtConfig.jwtRealm
+import ru.itcompany.config.JwtManager
+import ru.itcompany.config.JwtManager.jwtRealm
 
 fun Application.configureSecurity() {
 
@@ -18,11 +15,12 @@ fun Application.configureSecurity() {
     authentication {
         jwt("auth-jwt") {
             realm = jwtRealm
-            verifier(JwtConfig.verifierToken())
-            validate { credential -> JwtConfig.validateToken(credential) }
+            verifier(JwtManager.verifierToken())
+            validate { credential -> JwtManager.validateToken(credential) }
             challenge { defaultScheme, realm ->
                 call.respond(HttpStatusCode.Unauthorized, "Unauthorized")
             }
+
 
         }
     }

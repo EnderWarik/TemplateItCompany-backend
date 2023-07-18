@@ -1,9 +1,9 @@
-package ru.itcompany.routes.Authorization.dto
+package ru.itcompany.routes.authorization.dto
 
 import kotlinx.serialization.Serializable
-import java.util.*
+
 @Serializable
-class LoginUserDto(
+class AuthenticateUserDto(
     val email: String,
     val password: String
 )
