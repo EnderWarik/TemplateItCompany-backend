@@ -43,12 +43,13 @@ dependencies {
     implementation("org.ktorm:ktorm-core:${ktorm_version}")
     implementation("org.mindrot:jbcrypt:0.4")
     implementation("org.ktorm:ktorm-support-postgresql:${ktorm_version}")
+    implementation("io.ktor:ktor-server-host-common-jvm:2.3.2")
+    implementation("io.ktor:ktor-server-status-pages-jvm:2.3.2")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
 }
-//   implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-//    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-//    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+
 flyway {
     url = System.getenv("DB_URL")
     user = System.getenv("DB_USER")
@@ -56,6 +57,5 @@ flyway {
     baselineOnMigrate = true
     locations = arrayOf("filesystem: resources / db / migration")
     schemas = arrayOf("public")
-
 }
 
