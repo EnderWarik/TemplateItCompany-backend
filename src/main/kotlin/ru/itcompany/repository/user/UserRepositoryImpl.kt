@@ -1,4 +1,4 @@
-package ru.itcompany.repository
+package ru.itcompany.repository.user
 
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
@@ -11,24 +11,22 @@ import ru.itcompany.models.Users
 import ru.itcompany.models.users
 
 
-class UserRepository {
+class UserRepositoryImpl(private val database:Database) : UserRepository {
 
-    private val database: Database = DatabaseFactory.getDataBase()
-
-    fun getAll(predicate: BinaryExpression<Boolean>) :List<User>?
+    override fun getAll(predicate: BinaryExpression<Boolean>) :List<User>?
     {
         return database.safeTransaction {
             it.users.filter {predicate}.toList()
         }
     }
 
-    fun findByEmail(email:String):User?  {
+    override fun findByEmail(email:String):User?  {
         return database.safeTransaction {
             it.users.filter {Users.email eq email}.firstOrNull()
         }
     }
 
-    fun create(user: User) {
+    override fun create(user: User) {
         database.safeTransaction {
              it.users.add(user)
          }
