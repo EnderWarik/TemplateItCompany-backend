@@ -4,14 +4,14 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import ru.itcompany.config.ServiceFactory
 import ru.itcompany.routes.authorization.dto.AuthenticateUserDto
 import ru.itcompany.routes.authorization.dto.RegisterUserDto
 import ru.itcompany.routes.authorization.mappers.AuthenticateMapper
-import ru.itcompany.service.authenticate.AuthenticateService
 
 
 fun Route.authorizationController() {
-    val service = AuthenticateService()
+    val service = ServiceFactory.getAuthenticateService()
 
     route("/auth")
     {
