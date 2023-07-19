@@ -10,11 +10,17 @@ import ru.itcompany.service.user.UserServiceImpl
 
 object ServiceFactory {
     private val database = DatabaseFactory.getDataBase()
-    private val userRepository: UserRepository = UserRepositoryImpl(database)
-    private val userService: UserService = UserServiceImpl(userRepository)
-    private val authenticateService: AuthenticateService = AuthenticateServiceImpl(userRepository)
+
     fun getAuthenticateService() : AuthenticateService
     {
-        return authenticateService
+        return AuthenticateServiceImpl(getUserRepository())
+    }
+    fun getUserService() : UserService
+    {
+        return UserServiceImpl(getUserRepository())
+    }
+    fun getUserRepository() : UserRepository
+    {
+        return UserRepositoryImpl(database)
     }
 }
