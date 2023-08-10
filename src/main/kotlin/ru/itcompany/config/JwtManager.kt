@@ -6,13 +6,13 @@ import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.server.auth.jwt.*
 import java.util.*
 
-object JwtManager {
-    private val jwtAudience = ConfigHandler.getString("ktor.security.jwt.audience")
-    private val jwtDomain = ConfigHandler.getString("ktor.security.jwt.issuer")
-    val jwtRealm = ConfigHandler.getString("ktor.security.jwt.realm")
-    private val jwtSecret = ConfigHandler.getString("ktor.security.jwt.secret")
-    private val jwtIssuer = ConfigHandler.getString("ktor.security.jwt.issuer")
-    private val lifeRime = ConfigHandler.getInt("ktor.security.jwt.lifeTimeMS")
+class JwtManager(private val config: ConfigHandler) {
+    private val jwtAudience = config.getString("ktor.security.jwt.audience")
+    private val jwtDomain = config.getString("ktor.security.jwt.issuer")
+    val jwtRealm = config.getString("ktor.security.jwt.realm")
+    private val jwtSecret = config.getString("ktor.security.jwt.secret")
+    private val jwtIssuer = config.getString("ktor.security.jwt.issuer")
+    private val lifeRime = config.getInt("ktor.security.jwt.lifeTimeMS")
     fun verifierToken():JWTVerifier
     {
         return JWT

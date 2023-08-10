@@ -9,14 +9,14 @@ import ru.itcompany.repository.user.UserRepository
 import ru.itcompany.service.authenticate.argument.AuthenticateArgument
 import ru.itcompany.service.user.argument.RegisterUserArgument
 
-class AuthenticateServiceImpl(private val repository: UserRepository) : AuthenticateService {
+class AuthenticateServiceImpl(private val repository: UserRepository,private val jwtManager: JwtManager) : AuthenticateService {
 
     override fun authenticate(argument : AuthenticateArgument) : String
     {
         val user = repository.findByEmail(argument.email)
         if (user !== null && BCrypt.checkpw(argument.password,user.password))
         {
-            return JwtManager.create(argument.email)
+            return jwtManager.create(argument.email)
         }
         else throw AuthenticationException("Wrong email or password")
     }
@@ -35,7 +35,7 @@ class AuthenticateServiceImpl(private val repository: UserRepository) : Authenti
             inn= argument.inn
             organizationName= argument.organizationName
         })
-        return JwtManager.create(argument.email)
+        return jwtManager.create(argument.email)
     }
 
 }

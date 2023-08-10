@@ -7,12 +7,13 @@ import org.ktorm.expression.BinaryExpression
 import ru.itcompany.db.DatabaseFactory
 import ru.itcompany.db.safeTransaction
 import ru.itcompany.models.User
-import ru.itcompany.models.Users
-import ru.itcompany.models.users
+import ru.itcompany.models.dao.Users
+import ru.itcompany.models.dao.users
 
 
-class UserRepositoryImpl(private val database:Database) : UserRepository {
+class UserRepositoryImpl(databaseFactory:DatabaseFactory) : UserRepository {
 
+    private val database = databaseFactory.getDataBase()
     override fun getAll(predicate: BinaryExpression<Boolean>) :List<User>?
     {
         return database.safeTransaction {
@@ -22,7 +23,7 @@ class UserRepositoryImpl(private val database:Database) : UserRepository {
 
     override fun findByEmail(email:String):User?  {
         return database.safeTransaction {
-            it.users.filter {Users.email eq email}.firstOrNull()
+            it.users.filter { Users.email eq email}.firstOrNull()
         }
     }
 

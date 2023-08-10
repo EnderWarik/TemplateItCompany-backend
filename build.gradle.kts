@@ -6,6 +6,7 @@ val flyway_core_version: String by project
 val HikariCP_version: String by project
 val h2_version: String by project
 val ktorm_version: String by project
+val koin_version: String by project
 plugins {
     kotlin("jvm") version "1.8.22"
     id("io.ktor.plugin") version "2.3.2"
@@ -41,13 +42,18 @@ dependencies {
     implementation("com.zaxxer:HikariCP:$HikariCP_version")
     implementation("org.flywaydb:flyway-core:$flyway_core_version")
     implementation("org.ktorm:ktorm-core:${ktorm_version}")
-    implementation("org.mindrot:jbcrypt:0.4")
     implementation("org.ktorm:ktorm-support-postgresql:${ktorm_version}")
+    implementation("org.mindrot:jbcrypt:0.4")
     implementation("io.ktor:ktor-server-host-common-jvm:2.3.2")
     implementation("io.ktor:ktor-server-status-pages-jvm:2.3.2")
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    implementation("io.insert-koin:koin-ktor:$koin_version")
+    implementation("io.insert-koin:koin-core:$koin_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
+    testImplementation ("io.mockk:mockk:1.12.4")
+    testImplementation(kotlin("test"))
 }
 
 flyway {
@@ -59,3 +65,6 @@ flyway {
     schemas = arrayOf("public")
 }
 
+tasks.test {
+    useJUnitPlatform()
+}

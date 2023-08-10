@@ -2,22 +2,23 @@ package ru.itcompany.db
 
 import com.zaxxer.hikari.*
 import org.flywaydb.core.Flyway
+import org.koin.core.component.KoinComponent
 import org.ktorm.database.Database
 
 import ru.itcompany.config.ConfigHandler
-import ru.itcompany.models.users
+
 import java.io.*
 
-object DatabaseFactory{
-    private lateinit var database:Database
-    private lateinit var hikariDataSource:HikariDataSource
-    fun init() {
-        val password = ConfigHandler.getString("ktor.storage.password")
-        val user = ConfigHandler.getString("ktor.storage.user")
-        val host = ConfigHandler.getString("ktor.storage.host")
-        val port =   ConfigHandler.getString("ktor.storage.port")
-        val dbFilePath =ConfigHandler.getStringOrNull("ktor.storage.dbFilePath")
-        val driver  =ConfigHandler.getString("ktor.storage.driver")
+class DatabaseFactory(private val config: ConfigHandler) {
+    private var database:Database
+    private var hikariDataSource:HikariDataSource
+    init {
+        val password = config.getString("ktor.storage.password")
+        val user = config.getString("ktor.storage.user")
+        val host = config.getString("ktor.storage.host")
+        val port =   config.getString("ktor.storage.port")
+        val dbFilePath =config.getStringOrNull("ktor.storage.dbFilePath")
+        val driver  =config.getString("ktor.storage.driver")
         val jdbcURL = " jdbc:postgresql://" +
                 host +
                 ":" +

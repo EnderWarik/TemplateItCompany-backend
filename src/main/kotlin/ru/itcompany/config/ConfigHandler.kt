@@ -3,14 +3,8 @@ package ru.itcompany.config
 import io.ktor.server.application.*
 import io.ktor.server.config.*
 
-object ConfigHandler {
+class ConfigHandler( var config:ApplicationConfig) {
 
-    lateinit var  config:ApplicationConfig
-
-    fun init(config:ApplicationConfig)
-    {
-       this.config = config
-    }
     fun getInt(property:String) : Int
     {
         return try {

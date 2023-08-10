@@ -5,18 +5,21 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
+
+import org.koin.ktor.ext.inject
 import ru.itcompany.config.JwtManager
-import ru.itcompany.config.JwtManager.jwtRealm
+
 
 fun Application.configureSecurity() {
 
+    val jwtManager: JwtManager by inject()
     // Please read the jwt property from the config file if you are using EngineMain
 
     authentication {
         jwt("auth-jwt") {
-            realm = jwtRealm
-            verifier(JwtManager.verifierToken())
-            validate { credential -> JwtManager.validateToken(credential) }
+            realm = jwtManager.jwtRealm
+            verifier(jwtManager.verifierToken())
+            validate { credential -> jwtManager.validateToken(credential) }
             challenge { defaultScheme, realm ->
                 call.respond(HttpStatusCode.Unauthorized, "Unauthorized")
             }
