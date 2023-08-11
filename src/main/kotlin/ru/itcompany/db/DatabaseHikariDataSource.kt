@@ -1,24 +1,22 @@
 package ru.itcompany.db
 
 import com.zaxxer.hikari.*
+import io.ktor.server.config.*
 import org.flywaydb.core.Flyway
-import org.koin.core.component.KoinComponent
-import org.ktorm.database.Database
 
 import ru.itcompany.config.ConfigHandler
 
 import java.io.*
 
-class DatabaseFactory(private val config: ConfigHandler) {
-    private var database:Database
+class DatabaseHikariDataSource(var config: ApplicationConfig) {
     private var hikariDataSource:HikariDataSource
     init {
-        val password = config.getString("ktor.storage.password")
-        val user = config.getString("ktor.storage.user")
-        val host = config.getString("ktor.storage.host")
-        val port =   config.getString("ktor.storage.port")
-        val dbFilePath =config.getStringOrNull("ktor.storage.dbFilePath")
-        val driver  =config.getString("ktor.storage.driver")
+        val password = config.property("ktor.storage.password").getString()
+        val user = config.property("ktor.storage.user").getString()
+        val host = config.property("ktor.storage.host").getString()
+        val port =   config.property("ktor.storage.port").getString()
+        val dbFilePath = config.propertyOrNull("ktor.storage.dbFilePath")?.getString()
+        val driver  = config.property("ktor.storage.driver").getString()
         val jdbcURL = " jdbc:postgresql://" +
                 host +
                 ":" +
@@ -33,7 +31,7 @@ class DatabaseFactory(private val config: ConfigHandler) {
         dbUser = user,
         driver = driver
         )
-        database =  Database.connect(hikariDataSource)
+
     }
 
     private fun createHikariDataSource(
@@ -53,12 +51,10 @@ class DatabaseFactory(private val config: ConfigHandler) {
         validate()
     })
 
-    fun migrate() {
-        val flyway = Flyway.configure().dataSource(hikariDataSource).load()
-        flyway.migrate()
+    fun get(): HikariDataSource
+    {
+        return hikariDataSource
     }
 
-    fun getDataBase():Database {
-       return database
-    }
+
 }

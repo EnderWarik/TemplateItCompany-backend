@@ -4,16 +4,15 @@ import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.*
 import org.ktorm.expression.BinaryExpression
-import ru.itcompany.db.DatabaseFactory
 import ru.itcompany.db.safeTransaction
 import ru.itcompany.models.User
 import ru.itcompany.models.dao.Users
 import ru.itcompany.models.dao.users
 
 
-class UserRepositoryImpl(databaseFactory:DatabaseFactory) : UserRepository {
+class UserRepositoryImpl(private val database: Database) : UserRepository {
 
-    private val database = databaseFactory.getDataBase()
+
     override fun getAll(predicate: BinaryExpression<Boolean>) :List<User>?
     {
         return database.safeTransaction {

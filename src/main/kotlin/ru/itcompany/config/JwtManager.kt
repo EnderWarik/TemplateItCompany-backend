@@ -4,15 +4,16 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.config.*
 import java.util.*
 
-class JwtManager(private val config: ConfigHandler) {
-    private val jwtAudience = config.getString("ktor.security.jwt.audience")
-    private val jwtDomain = config.getString("ktor.security.jwt.issuer")
-    val jwtRealm = config.getString("ktor.security.jwt.realm")
-    private val jwtSecret = config.getString("ktor.security.jwt.secret")
-    private val jwtIssuer = config.getString("ktor.security.jwt.issuer")
-    private val lifeRime = config.getInt("ktor.security.jwt.lifeTimeMS")
+class JwtManager(val config: ApplicationConfig) {
+    private val jwtAudience = config.property("ktor.security.jwt.audience").getString()
+    private val jwtDomain = config.property("ktor.security.jwt.issuer").getString()
+    val jwtRealm = config.property("ktor.security.jwt.realm").getString()
+    private val jwtSecret = config.property("ktor.security.jwt.secret").getString()
+    private val jwtIssuer = config.property("ktor.security.jwt.issuer").getString()
+    private val lifeRime = config.property("ktor.security.jwt.lifeTimeMS").getString().toInt()
     fun verifierToken():JWTVerifier
     {
         return JWT

@@ -4,15 +4,18 @@ package ru.itcompany
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import org.koin.core.qualifier.named
+import org.flywaydb.core.Flyway
 import org.koin.dsl.module
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.koin
+import org.ktorm.database.Database
 import ru.itcompany.config.ConfigHandler
+import ru.itcompany.config.JwtManager
 
 import ru.itcompany.config.koinModules
 import ru.itcompany.configurations.*
-import ru.itcompany.db.DatabaseFactory
+
+import ru.itcompany.db.DatabaseHikariDataSource
 
 fun main(args: Array<String>): Unit
 {
@@ -21,18 +24,20 @@ fun main(args: Array<String>): Unit
 }
 
 fun Application.module() {
-    val configModule = module{
-        single { ConfigHandler(environment.config) }
-    }
-    koin { modules(configModule,koinModules)}
-    val database:DatabaseFactory by inject()
-    database.migrate()
+    val dataSource = DatabaseHikariDataSource(environment.config).get()
+    val database: Database = Database.connect(dataSource)
+    val flyway = Flyway.configure().dataSource(dataSource).load()
+    flyway.migrate()
 
-    val config:ConfigHandler by inject()
+    val databaseModule = module{
+        single { database }
+        factory { JwtManager(environment.config) }
+    }
+    koin { modules(databaseModule,koinModules)}
     embeddedServer(
         CIO,
-        port = config.getIntOrNull("ktor.deployment.port") ?: 8080,
-        host = config.getStringOrNull("ktor.deployment.host") ?: "0.0.0.0",
+        port = environment.config.propertyOrNull("ktor.deployment.port")?.getString()?.toInt() ?: 8080,
+        host = environment.config.propertyOrNull("ktor.deployment.host")?.getString() ?: "0.0.0.0",
         module =
         {
             configureSecurity()
