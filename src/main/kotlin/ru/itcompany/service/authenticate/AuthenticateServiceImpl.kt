@@ -25,7 +25,7 @@ class AuthenticateServiceImpl(private val repository: UserRepository,private val
         repository.findByEmail(argument.email)?.let { throw UserAlreadyExistException("User already exist") }
         repository.create(User{
             email = argument.email
-            password = argument.password
+            password = BCrypt.hashpw(argument.password, BCrypt.gensalt())
             role= argument.role
             firstName= argument.firstName
             lastName= argument.lastName

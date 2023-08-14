@@ -18,7 +18,7 @@ object AuthenticateMapper {
     {
         return RegisterUserArgument.Builder()
             .email(dto.email)
-            .password(BCrypt.hashpw(dto.password, BCrypt.gensalt()))
+            .password(dto.password)
             .role(dto.role)
             .firstName(dto.firstName)
             .lastName(dto.lastName)
