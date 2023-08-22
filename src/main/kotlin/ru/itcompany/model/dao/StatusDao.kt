@@ -10,7 +10,6 @@ val Database.statuses get() = this.sequenceOf(StatusDao)
 object StatusDao : Table<Status>("statuses") {
     val id = long("id").primaryKey().bindTo { it.id }
     val status = enum<StatusAppealEnum>("status").bindTo { it.status }
-    val appealId = varchar("appeal_id").bindTo { it.appealId }
+    val appealId = long("appeal_id").bindTo { it.appealId }
     val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
-
 }

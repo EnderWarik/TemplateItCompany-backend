@@ -3,7 +3,7 @@ package ru.itcompany.service.authenticate
 import org.mindrot.jbcrypt.BCrypt
 import ru.itcompany.utils.JwtManager
 import ru.itcompany.exeption.AuthenticationException
-import ru.itcompany.exeption.UserAlreadyExistException
+import ru.itcompany.exeption.user.UserAlreadyExistException
 import ru.itcompany.model.User
 import ru.itcompany.repository.user.UserRepository
 import ru.itcompany.service.authenticate.argument.AuthenticateArgument

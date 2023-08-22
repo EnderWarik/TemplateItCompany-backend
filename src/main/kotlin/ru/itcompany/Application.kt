@@ -24,6 +24,7 @@ fun Application.module() {
     val dataSource = DatabaseHikariDataSource(environment.config).get()
     val database: Database = Database.connect(dataSource)
     val flyway = Flyway.configure().dataSource(dataSource).load()
+
     flyway.migrate()
 
     val applicationModule = module{

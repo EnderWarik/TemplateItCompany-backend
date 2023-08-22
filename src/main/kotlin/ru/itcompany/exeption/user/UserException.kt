@@ -1,4 +1,4 @@
-package ru.itcompany.exeption
+package ru.itcompany.exeption.user
 
 import java.util.*
 

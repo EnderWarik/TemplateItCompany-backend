@@ -5,7 +5,7 @@ import org.ktorm.dsl.*
 import org.ktorm.entity.*
 import org.ktorm.expression.BinaryExpression
 import ru.itcompany.db.safeTransaction
-import ru.itcompany.exeption.UserNotFoundException
+import ru.itcompany.exeption.user.UserNotFoundException
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.UserDao
 import ru.itcompany.model.dao.users

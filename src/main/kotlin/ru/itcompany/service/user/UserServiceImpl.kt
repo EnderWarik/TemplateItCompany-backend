@@ -2,7 +2,7 @@ package ru.itcompany.service.user
 
 import org.ktorm.dsl.eq
 import org.mindrot.jbcrypt.BCrypt
-import ru.itcompany.exeption.UserAlreadyExistException
+import ru.itcompany.exeption.user.UserAlreadyExistException
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.UserDao
 import ru.itcompany.repository.user.UserRepository
