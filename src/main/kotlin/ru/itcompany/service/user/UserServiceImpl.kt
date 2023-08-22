@@ -4,7 +4,7 @@ import org.ktorm.dsl.eq
 import org.mindrot.jbcrypt.BCrypt
 import ru.itcompany.exeption.UserAlreadyExistException
 import ru.itcompany.model.User
-import ru.itcompany.model.dao.Users
+import ru.itcompany.model.dao.UserDao
 import ru.itcompany.repository.user.UserRepository
 import ru.itcompany.service.user.argument.CreateUserArgument
 import ru.itcompany.service.user.argument.UpdateUserArgument
@@ -32,7 +32,7 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
     }
 
     override fun update(id: Long, argument: UpdateUserArgument): User {
-        val user = repository.getFirstBy{ it: Users ->
+        val user = repository.getFirstBy{ it: UserDao ->
             it.id eq id
         }
         user.email = argument.email
@@ -50,7 +50,7 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
     }
 
     override fun delete(id: Long) {
-        val user = repository.getFirstBy{ it: Users ->
+        val user = repository.getFirstBy{ it: UserDao ->
             it.id eq id
         }
          repository.delete(user)

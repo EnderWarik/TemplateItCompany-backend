@@ -9,8 +9,8 @@ import org.ktorm.schema.varchar
 import ru.itcompany.model.User
 import ru.itcompany.model.enum.UserRoleEnum
 
-val Database.users get() = this.sequenceOf(Users)
-object Users : Table<User>("users") {
+val Database.users get() = this.sequenceOf(UserDao)
+object UserDao : Table<User>("users") {
     val id = long("id").primaryKey().bindTo { it.id }
     val email = varchar("email").bindTo { it.email }
     val password = varchar("password").bindTo { it.password }

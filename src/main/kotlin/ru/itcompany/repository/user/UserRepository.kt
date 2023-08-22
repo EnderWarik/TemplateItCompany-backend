@@ -1,12 +1,11 @@
 package ru.itcompany.repository.user
 
 import org.ktorm.expression.BinaryExpression
-import org.ktorm.schema.ColumnDeclaring
 import ru.itcompany.model.User
-import ru.itcompany.model.dao.Users
+import ru.itcompany.model.dao.UserDao
 
 interface UserRepository {
-    fun getAllBy(predicate: (Users) -> BinaryExpression<Boolean>) :List<User>
+    fun getAllBy(predicate: (UserDao) -> BinaryExpression<Boolean>) :List<User>
 
     fun getAll() :List<User>
 
@@ -14,7 +13,7 @@ interface UserRepository {
 
     fun create(user: User): User
 
-    fun getFirstBy(predicate: (Users) -> BinaryExpression<Boolean>): User
+    fun getFirstBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User
 
     fun update(user: User): User
 

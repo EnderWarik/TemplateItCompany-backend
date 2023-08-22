@@ -4,13 +4,10 @@ import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.*
 import org.ktorm.expression.BinaryExpression
-import org.ktorm.schema.ColumnDeclaring
-import org.mindrot.jbcrypt.BCrypt
 import ru.itcompany.db.safeTransaction
-import ru.itcompany.exeption.UserAlreadyExistException
 import ru.itcompany.exeption.UserNotFoundException
 import ru.itcompany.model.User
-import ru.itcompany.model.dao.Users
+import ru.itcompany.model.dao.UserDao
 import ru.itcompany.model.dao.users
 
 
@@ -22,7 +19,7 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
             it.users.toList()
         }
     }
-    override fun getAllBy(predicate: (Users) -> BinaryExpression<Boolean>) : List<User>
+    override fun getAllBy(predicate: (UserDao) -> BinaryExpression<Boolean>) : List<User>
     {
         return database.safeTransaction {
             it.users.filter(predicate).toList()
@@ -30,7 +27,7 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
     }
     override fun findByEmail(email:String):User?  {
         return database.safeTransaction {
-            it.users.filter { Users.email eq email}.firstOrNull()
+            it.users.filter { UserDao.email eq email}.firstOrNull()
         }
     }
 
@@ -38,12 +35,12 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
         database.safeTransaction {
              it.users.add(user)
          }
-        return getFirstBy { it: Users ->
+        return getFirstBy { it: UserDao ->
             it.email eq user.email
         }
     }
 
-    override fun getFirstBy(predicate: (Users) -> BinaryExpression<Boolean>): User {
+    override fun getFirstBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User {
         return database.safeTransaction {
             it.users.filter(predicate).firstOrNull()
         } ?: throw UserNotFoundException("Not exists")
