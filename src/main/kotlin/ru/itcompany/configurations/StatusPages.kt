@@ -12,7 +12,7 @@ fun Application.configureStatusPages() {
             call.respond(status = HttpStatusCode.Unauthorized, message = cause.message ?: "Authentication failed!")
         }
         exception<UserException> { call, cause ->
-            call.respond(status = HttpStatusCode.Unauthorized, message = cause.message ?: "User error")
+            call.respond(status = HttpStatusCode.Conflict, message = cause.message ?: "User error")
         }
         exception<DataBaseExeption> { call, cause ->
             call.respond(status = HttpStatusCode.InternalServerError, message = cause.message ?: "Problem of interaction with the database")

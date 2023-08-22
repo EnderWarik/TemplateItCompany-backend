@@ -1,12 +1,11 @@
-package ru.itcompany.routes.authorization.mappers
+package ru.itcompany.routes.authorization.mapper
 
-import org.mindrot.jbcrypt.BCrypt
 import ru.itcompany.routes.authorization.dto.AuthenticateUserDto
 import ru.itcompany.routes.authorization.dto.RegisterUserDto
 import ru.itcompany.service.authenticate.argument.AuthenticateArgument
 import ru.itcompany.service.user.argument.RegisterUserArgument
 
-object AuthenticateMapper {
+class AuthenticateMapper {
     fun toAuthenticateArgument(dto: AuthenticateUserDto) : AuthenticateArgument
     {
        return AuthenticateArgument.Builder()

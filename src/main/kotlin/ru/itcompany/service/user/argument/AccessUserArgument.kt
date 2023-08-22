@@ -1,6 +1,6 @@
 package ru.itcompany.service.user.argument
 
-class UserAccessArgument private constructor(
+class AccessUserArgument private constructor(
     var email: String,
     var password: String
 ) {
@@ -11,7 +11,7 @@ class UserAccessArgument private constructor(
     ) {
         fun email(email: String)= apply { this.email = email }
         fun password(password: String) = apply { this.password = password }
-        fun build() = UserAccessArgument(email, password)
+        fun build() = AccessUserArgument(email, password)
     }
 
 }

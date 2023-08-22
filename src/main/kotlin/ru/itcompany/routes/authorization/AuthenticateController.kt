@@ -8,19 +8,18 @@ import org.koin.ktor.ext.inject
 import ru.itcompany.routes.authorization.dto.AuthenticateUserDto
 
 import ru.itcompany.routes.authorization.dto.RegisterUserDto
-import ru.itcompany.routes.authorization.mappers.AuthenticateMapper
+import ru.itcompany.routes.authorization.mapper.AuthenticateMapper
 import ru.itcompany.service.authenticate.AuthenticateService
 
 
 fun Route.authorizationController() {
     val service: AuthenticateService by inject()
-
+    val mapper = AuthenticateMapper()
     route("/auth")
     {
-
         post("/login") {
             service.authenticate(
-                AuthenticateMapper.toAuthenticateArgument(
+                mapper.toAuthenticateArgument(
                     call.receive<AuthenticateUserDto>()
                 )
             ).let {
@@ -33,7 +32,7 @@ fun Route.authorizationController() {
         {
 
             service.register(
-                AuthenticateMapper.toRegisterArgument(
+                mapper.toRegisterArgument(
                     call.receive<RegisterUserDto>()
                 )
             ).let {

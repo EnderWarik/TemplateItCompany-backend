@@ -2,9 +2,6 @@ package ru.itcompany.db
 
 import com.zaxxer.hikari.*
 import io.ktor.server.config.*
-import org.flywaydb.core.Flyway
-
-import ru.itcompany.config.ConfigHandler
 
 import java.io.*
 

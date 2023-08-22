@@ -1,17 +1,14 @@
-package ru.itcompany.models
+package ru.itcompany.model
 
-import org.ktorm.database.Database
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
+import kotlinx.serialization.Serializable
 import org.ktorm.entity.Entity
-import org.ktorm.entity.sequenceOf
-import org.ktorm.schema.Table
-import org.ktorm.schema.enum
-import org.ktorm.schema.long
-import org.ktorm.schema.varchar
-import ru.itcompany.models.enum.UserRoleEnum
-import ru.itcompany.service.user.argument.RegisterUserArgument
+import ru.itcompany.model.enum.UserRoleEnum
 
 
 interface  User : Entity<User> {
+
     companion object : Entity.Factory<User>()
     val id: Long
     var email: String

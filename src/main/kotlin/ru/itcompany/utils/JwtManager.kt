@@ -1,4 +1,4 @@
-package ru.itcompany.config
+package ru.itcompany.utils
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier

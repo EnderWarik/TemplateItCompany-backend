@@ -1,6 +1,5 @@
-package ru.itcompany.config
+package ru.itcompany.utils
 
-import io.ktor.server.application.*
 import io.ktor.server.config.*
 
 class ConfigHandler( var config:ApplicationConfig) {

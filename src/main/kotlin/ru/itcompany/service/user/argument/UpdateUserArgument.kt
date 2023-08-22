@@ -2,8 +2,7 @@ package ru.itcompany.service.user.argument
 
 import ru.itcompany.model.enum.UserRoleEnum
 
-
-class RegisterUserArgument private constructor(
+class UpdateUserArgument private constructor(
     val email: String,
     val password: String,
     val role: UserRoleEnum,
@@ -28,7 +27,8 @@ class RegisterUserArgument private constructor(
         var inn: String? = null,
         var organizationName: String? = null
     ) {
-        fun email(email: String)= apply { this.email = email }
+
+        fun email(email: String) = apply { this.email = email }
         fun password(password: String) = apply { this.password = password }
         fun role(role: UserRoleEnum)= apply { this.role = role }
         fun firstName(firstName: String) = apply { this.firstName = firstName }
@@ -38,7 +38,9 @@ class RegisterUserArgument private constructor(
         fun phoneNumber(phoneNumber: String?) = apply { this.phoneNumber = phoneNumber }
         fun inn(inn: String?)= apply { this.inn = inn }
         fun organizationName(organizationName: String?) = apply { this.organizationName = organizationName }
-        fun build() = RegisterUserArgument(email, password, role, firstName, lastName, thirdName, address, phoneNumber, inn, organizationName)
+        fun build() = UpdateUserArgument( email, password, role, firstName, lastName, thirdName, address, phoneNumber, inn, organizationName)
     }
+
+
 
 }

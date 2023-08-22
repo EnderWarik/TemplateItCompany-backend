@@ -1,7 +1,7 @@
 package ru.itcompany.routes.authorization.dto
 
 import kotlinx.serialization.Serializable
-import ru.itcompany.models.enum.UserRoleEnum
+import ru.itcompany.model.enum.UserRoleEnum
 
 @Serializable
 class RegisterUserDto(

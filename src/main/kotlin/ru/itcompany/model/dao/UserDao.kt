@@ -1,14 +1,13 @@
-package ru.itcompany.models.dao
+package ru.itcompany.model.dao
 
 import org.ktorm.database.Database
-import org.ktorm.entity.Entity
 import org.ktorm.entity.sequenceOf
 import org.ktorm.schema.Table
 import org.ktorm.schema.enum
 import org.ktorm.schema.long
 import org.ktorm.schema.varchar
-import ru.itcompany.models.User
-import ru.itcompany.models.enum.UserRoleEnum
+import ru.itcompany.model.User
+import ru.itcompany.model.enum.UserRoleEnum
 
 val Database.users get() = this.sequenceOf(Users)
 object Users : Table<User>("users") {

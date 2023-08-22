@@ -35,6 +35,9 @@ dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
+    implementation("io.ktor:ktor-serialization-jackson:$ktor_version")
+    implementation("org.ktorm:ktorm-jackson:$ktorm_version")
+
     implementation("io.ktor:ktor-server-websockets-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-cio-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
@@ -43,9 +46,11 @@ dependencies {
     implementation("org.flywaydb:flyway-core:$flyway_core_version")
     implementation("org.ktorm:ktorm-core:${ktorm_version}")
     implementation("org.ktorm:ktorm-support-postgresql:${ktorm_version}")
+
     implementation("org.mindrot:jbcrypt:0.4")
     implementation("io.ktor:ktor-server-host-common-jvm:2.3.2")
     implementation("io.ktor:ktor-server-status-pages-jvm:2.3.2")
+
 
     implementation("io.insert-koin:koin-ktor:$koin_version")
     implementation("io.insert-koin:koin-core:$koin_version")

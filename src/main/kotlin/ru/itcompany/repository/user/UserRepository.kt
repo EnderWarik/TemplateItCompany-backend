@@ -1,10 +1,23 @@
 package ru.itcompany.repository.user
 
 import org.ktorm.expression.BinaryExpression
-import ru.itcompany.models.User
+import org.ktorm.schema.ColumnDeclaring
+import ru.itcompany.model.User
+import ru.itcompany.model.dao.Users
 
 interface UserRepository {
-    fun getAll(predicate: BinaryExpression<Boolean>) :List<User>?
+    fun getAllBy(predicate: (Users) -> BinaryExpression<Boolean>) :List<User>
+
+    fun getAll() :List<User>
+
     fun findByEmail(email:String):User?
-    fun create(user: User)
+
+    fun create(user: User): User
+
+    fun getFirstBy(predicate: (Users) -> BinaryExpression<Boolean>): User
+
+    fun update(user: User): User
+
+    fun delete(user: User)
+
 }

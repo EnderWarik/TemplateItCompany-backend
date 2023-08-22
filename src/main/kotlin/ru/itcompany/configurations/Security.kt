@@ -7,7 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 
 import org.koin.ktor.ext.inject
-import ru.itcompany.config.JwtManager
+import ru.itcompany.utils.JwtManager
 
 
 fun Application.configureSecurity() {

@@ -1,15 +1,12 @@
 package ru.itcompany.service.authenticate
 
 import io.mockk.*
-import junit.framework.TestCase
-import org.junit.Before
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.ktorm.database.Database
 import org.mindrot.jbcrypt.BCrypt
-import ru.itcompany.config.JwtManager
-import ru.itcompany.models.User
-import ru.itcompany.models.enum.UserRoleEnum
+import ru.itcompany.utils.JwtManager
+import ru.itcompany.model.User
+import ru.itcompany.model.enum.UserRoleEnum
 import ru.itcompany.repository.user.UserRepositoryImpl
 import ru.itcompany.service.authenticate.argument.AuthenticateArgument
 
@@ -39,7 +36,7 @@ class AuthenticateServiceImplTest {
             lastName = "lastName"
         }
         every { repository.findByEmail(argument.email) } returns findUser
-        every { repository.create(any()) } returns Unit
+        every { repository.create(any()) } returns findUser
 
         val captor = slot<String>()
 

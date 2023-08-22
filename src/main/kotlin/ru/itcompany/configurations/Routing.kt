@@ -8,9 +8,7 @@ import ru.itcompany.routes.authorization.authorizationController
 import ru.itcompany.routes.user.userController
 
 fun Application.configureRouting() {
-    install(ContentNegotiation) {
-        json()
-    }
+
     routing {
         authorizationController()
         userController()
