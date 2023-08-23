@@ -38,10 +38,10 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
         }
         return database.safeTransaction{
             it.appeals.filter {ap ->
-                appeal.userEmployeeId?.let {
-                    ap.userEmployeeId eq appeal.userEmployeeId!!
+                appeal.userEmployee?.let {
+                    ap.userEmployeeId eq appeal.userEmployee!!.id
                 } ?: ap.userEmployeeId.isNull()
-                (ap.userCreatorId eq appeal.userCreatorId) and
+                (ap.userCreatorId eq appeal.userCreator.id) and
                         (ap.statusId eq appeal.status.id)
             }.sortedByDescending { it.dateCreate }.first()
         }

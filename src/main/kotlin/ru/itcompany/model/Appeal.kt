@@ -18,8 +18,8 @@ interface Appeal : Entity<Appeal> {
 
     companion object : Entity.Factory<Appeal>()
     val id: Long
-    var userCreatorId: Long
-    var userEmployeeId: Long?
+    var userCreator: User
+    var userEmployee: User?
     var status: Status
     var title: String
     var dateCreate: Instant
