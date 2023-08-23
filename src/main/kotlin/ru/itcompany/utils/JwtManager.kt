@@ -3,6 +3,7 @@ package ru.itcompany.utils
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTVerificationException
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.config.*
 import java.util.*
@@ -42,5 +43,13 @@ class JwtManager(val config: ApplicationConfig) {
             .withExpiresAt(Date(System.currentTimeMillis() + lifeRime))
             .sign(Algorithm.HMAC256(jwtSecret))
     }
-
+    fun getEmailFromToken(token: String): String? {
+        val verifier = verifierToken()
+        val jwt = try {
+            verifier.verify(token)
+        } catch (e: JWTVerificationException) {
+            return null
+        }
+        return jwt.getClaim("email").asString()
+    }
 }

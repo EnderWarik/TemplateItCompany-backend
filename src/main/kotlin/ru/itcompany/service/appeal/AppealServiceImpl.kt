@@ -21,6 +21,10 @@ class AppealServiceImpl(
         return appealRepository.getAll()
     }
 
+    override fun findById(id: Long): Appeal? {
+        return appealRepository.getFirstOrNullBy{ it.id eq id }
+    }
+
     override fun create(argument: CreateAppealArgument): Appeal {
 
         val status = statusRepository.getFirstBy { it.id eq argument.statusId }

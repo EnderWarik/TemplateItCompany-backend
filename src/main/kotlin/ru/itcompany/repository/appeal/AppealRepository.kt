@@ -17,6 +17,8 @@ interface AppealRepository {
 
     fun getFirstBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal
 
+    fun getFirstOrNullBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal?
+
     fun update(appeal: Appeal): Appeal
 
     fun delete(appeal: Appeal)

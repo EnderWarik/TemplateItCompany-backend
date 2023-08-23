@@ -15,6 +15,8 @@ interface UserRepository {
 
     fun getFirstBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User
 
+    fun getFirstOrNullBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User?
+
     fun update(user: User): User
 
     fun delete(user: User)

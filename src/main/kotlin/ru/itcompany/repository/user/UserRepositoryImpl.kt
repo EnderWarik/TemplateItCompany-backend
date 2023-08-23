@@ -45,7 +45,11 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
             it.users.filter(predicate).firstOrNull()
         } ?: throw UserNotFoundException("User not exists")
     }
-
+    override fun getFirstOrNullBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User? {
+        return database.safeTransaction {
+            it.users.filter(predicate).firstOrNull()
+        }
+    }
     override fun update(user: User): User {
         user.flushChanges()
         return user

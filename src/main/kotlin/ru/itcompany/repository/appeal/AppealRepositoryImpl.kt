@@ -32,7 +32,6 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
     }
 
     override fun create(appeal: Appeal): Appeal {
-        println(appeal.title)
         database.safeTransaction {
             it.appeals.add(appeal)
         }
@@ -52,7 +51,11 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
             it.appeals.filter(predicate).firstOrNull()
         } ?: throw AppealNotFoundException("Appeal not exists")
     }
-
+    override fun  getFirstOrNullBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal? {
+        return database.safeTransaction {
+            it.appeals.filter(predicate).firstOrNull()
+        }
+    }
     override fun update(appeal: Appeal): Appeal {
         appeal.flushChanges()
         return appeal

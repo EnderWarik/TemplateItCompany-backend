@@ -1,24 +1,25 @@
-package ru.itcompany.service.appeal
+package ru.itcompany.service.message
 
 import ru.itcompany.model.Appeal
+import ru.itcompany.model.Message
 import ru.itcompany.model.Status
 import ru.itcompany.model.User
 import ru.itcompany.service.appeal.argument.CreateAppealArgument
 import ru.itcompany.service.appeal.argument.UpdateAppealArgument
+import ru.itcompany.service.message.argument.CreateMessageArgument
+import ru.itcompany.service.message.argument.UpdateMessageArgument
 import ru.itcompany.service.status.argument.CreateStatusArgument
 import ru.itcompany.service.status.argument.UpdateStatusArgument
 import ru.itcompany.service.user.argument.CreateUserArgument
 import ru.itcompany.service.user.argument.UpdateUserArgument
 
 
-interface AppealService {
-    fun getAll(): List<Appeal>
+interface MessageService {
+    fun getAll(): List<Message>
 
-    fun findById(id: Long): Appeal?
+    fun create(argument: CreateMessageArgument): Message
 
-    fun create(argument: CreateAppealArgument): Appeal
-
-    fun update(id: Long, argument: UpdateAppealArgument): Appeal
+    fun update(id: Long, argument: UpdateMessageArgument): Message
 
     fun delete(id: Long)
 }

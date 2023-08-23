@@ -3,6 +3,7 @@ package ru.itcompany.service.user
 import org.ktorm.dsl.eq
 import org.mindrot.jbcrypt.BCrypt
 import ru.itcompany.exeption.user.UserAlreadyExistException
+import ru.itcompany.model.Appeal
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.UserDao
 import ru.itcompany.repository.user.UserRepository
@@ -13,6 +14,10 @@ import ru.itcompany.service.user.argument.UpdateUserArgument
 class UserServiceImpl(private val repository: UserRepository) : UserService {
     override fun getAll(): List<User> {
         return repository.getAll()
+    }
+
+    override fun findByEmail(email: String): User? {
+        return repository.getFirstOrNullBy{it.email eq email}
     }
 
     override fun create(argument: CreateUserArgument): User {
@@ -35,8 +40,16 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
         val user = repository.getFirstBy{ it: UserDao ->
             it.id eq id
         }
+
+        if(user.email != argument.email)
+        {
+            findByEmail(argument.email)?.let {
+                throw UserAlreadyExistException("This email is busy")
+            }
+        }
+
         user.email = argument.email
-        user.password = argument.password
+        user.password = BCrypt.hashpw(argument.password, BCrypt.gensalt())
         user.role = argument.role
         user.firstName = argument.firstName
         user.lastName = argument.lastName
