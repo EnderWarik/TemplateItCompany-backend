@@ -14,12 +14,14 @@ import java.time.LocalDateTime
 import java.util.Date
 
 
-interface Status : Entity<Status> {
+interface Appeal : Entity<Appeal> {
 
-    companion object : Entity.Factory<Status>()
-    var id: Long
-    var status: StatusAppealEnum
-    var appealId: Long
+    companion object : Entity.Factory<Appeal>()
+    val id: Long
+    var userCreatorId: Long
+    var userEmployeeId: Long?
+    var status: Status
+    var title: String
     var dateCreate: Instant
 
 

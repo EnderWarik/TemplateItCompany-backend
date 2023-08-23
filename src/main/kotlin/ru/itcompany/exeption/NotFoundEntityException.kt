@@ -1,8 +1,6 @@
-package ru.itcompany.exeption.user
+package ru.itcompany.exeption
 
-import java.util.*
-
-open class UserException(
+open class NotFoundEntityException(
     override val message: String? = null,
     override val cause: Throwable? = null
 ) : Exception(message,cause)

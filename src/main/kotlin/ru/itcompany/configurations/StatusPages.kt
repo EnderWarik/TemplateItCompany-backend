@@ -5,17 +5,16 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import ru.itcompany.exeption.*
-import ru.itcompany.exeption.user.UserException
 
 fun Application.configureStatusPages() {
     install(StatusPages) {
         exception<AuthenticationException> { call, cause ->
             call.respond(status = HttpStatusCode.Unauthorized, message = cause.message ?: "Authentication failed!")
         }
-        exception<UserException> { call, cause ->
-            call.respond(status = HttpStatusCode.Conflict, message = cause.message ?: "User error")
+        exception<NotFoundEntityException> { call, cause ->
+            call.respond(status = HttpStatusCode.NotFound, message = cause.message ?: "Entity not found")
         }
-        exception<DataBaseExeption> { call, cause ->
+        exception<DataBaseException> { call, cause ->
             call.respond(status = HttpStatusCode.InternalServerError, message = cause.message ?: "Problem of interaction with the database")
         }
     }

@@ -1,8 +1,9 @@
 package ru.itcompany.exeption.status
 
-import ru.itcompany.exeption.user.UserException
+import ru.itcompany.exeption.NotFoundEntityException
+
 
 class StatusNotFoundException(
     override val message: String? = null,
     override val cause: Throwable? = null
-) : Exception(message,cause)
+) : NotFoundEntityException(message,cause)

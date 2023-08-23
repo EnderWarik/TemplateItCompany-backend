@@ -27,7 +27,7 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
     }
     override fun findByEmail(email:String):User?  {
         return database.safeTransaction {
-            it.users.filter { UserDao.email eq email}.firstOrNull()
+            it.users.filter { it.email eq email}.firstOrNull()
         }
     }
 
@@ -43,7 +43,7 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
     override fun getFirstBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User {
         return database.safeTransaction {
             it.users.filter(predicate).firstOrNull()
-        } ?: throw UserNotFoundException("Not exists")
+        } ?: throw UserNotFoundException("User not exists")
     }
 
     override fun update(user: User): User {

@@ -41,7 +41,7 @@ class StatusRepositoryImpl(private val database: Database) : StatusRepository {
     override fun getFirstBy(predicate: (StatusDao) -> BinaryExpression<Boolean>): Status {
         return database.safeTransaction {
             it.statuses.filter(predicate).firstOrNull()
-        } ?: throw StatusNotFoundException("Not exists")
+        } ?: throw StatusNotFoundException("Status not exists")
     }
 
     override fun update(status: Status): Status {
