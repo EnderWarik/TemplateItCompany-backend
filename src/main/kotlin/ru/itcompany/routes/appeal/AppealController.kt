@@ -9,6 +9,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import ru.itcompany.routes.appeal.dto.CreateAppealDto
+import ru.itcompany.routes.appeal.dto.DeleteAppealDto
 import ru.itcompany.routes.appeal.dto.UpdateAppealDto
 import ru.itcompany.routes.appeal.mapper.AppealMapper
 import ru.itcompany.routes.status.dto.CreateStatusDto
@@ -68,7 +69,9 @@ fun Route.appealController() {
                 val id = call.parameters["id"]?.toLong()
                 if(id != null)
                 {
-                    service.delete(id)
+                    service.delete(id,
+                        mapper.toDeleteAppealArgument(call.receive<DeleteAppealDto>())
+                    )
                     call.respond(HttpStatusCode.OK)
                 }
                 else

@@ -4,6 +4,8 @@ CREATE TABLE appeals(
   user_employee_id bigint,
   status_id bigint NOT NULL ,
   title varchar NOT NULL ,
+  user_delete_id bigint,
+  delete_reason varchar,
   is_deleted boolean NOT NULL,
   date_create timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(user_creator_id) REFERENCES users(id),

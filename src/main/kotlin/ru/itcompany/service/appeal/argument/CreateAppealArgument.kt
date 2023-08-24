@@ -8,13 +8,11 @@ import ru.itcompany.model.enum.UserRoleEnum
 import java.time.Instant
 
 class CreateAppealArgument private constructor(
-    var userCreatorId: Long,
-    var userEmployeeId: Long?,
-    var statusId: Long,
-    var title: String
+    val userCreatorId: Long,
+    val userEmployeeId: Long?,
+    val statusId: Long,
+    val title: String
 ) {
-
-
     data class Builder(
         var userCreatorId: Long = -1,
         var userEmployeeId: Long? = null,

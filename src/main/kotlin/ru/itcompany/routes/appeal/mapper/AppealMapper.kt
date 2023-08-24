@@ -1,12 +1,14 @@
 package ru.itcompany.routes.appeal.mapper
 
 import ru.itcompany.routes.appeal.dto.CreateAppealDto
+import ru.itcompany.routes.appeal.dto.DeleteAppealDto
 import ru.itcompany.routes.appeal.dto.UpdateAppealDto
 import ru.itcompany.routes.status.dto.CreateStatusDto
 import ru.itcompany.routes.status.dto.UpdateStatusDto
 import ru.itcompany.routes.user.dto.CreateUserDto
 import ru.itcompany.routes.user.dto.UpdateUserDto
 import ru.itcompany.service.appeal.argument.CreateAppealArgument
+import ru.itcompany.service.appeal.argument.DeleteAppealArgument
 import ru.itcompany.service.appeal.argument.UpdateAppealArgument
 import ru.itcompany.service.status.argument.CreateStatusArgument
 import ru.itcompany.service.status.argument.UpdateStatusArgument
@@ -30,6 +32,14 @@ class AppealMapper {
             .statusId(dto.statusId)
             .title(dto.title)
             .userEmployeeId(dto.userEmployeeId)
+            .build()
+    }
+
+    fun toDeleteAppealArgument(dto: DeleteAppealDto): DeleteAppealArgument
+    {
+        return DeleteAppealArgument.Builder()
+            .userDeleteId(dto.userDeleteId)
+            .deleteReason(dto.deleteReason)
             .build()
     }
 }

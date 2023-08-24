@@ -8,10 +8,10 @@ import ru.itcompany.model.enum.UserRoleEnum
 import java.time.Instant
 
 class UpdateAppealArgument private constructor(
-    var userCreatorId: Long,
-    var userEmployeeId: Long?,
-    var statusId: Long,
-    var title: String
+    val userCreatorId: Long,
+    val userEmployeeId: Long?,
+    val statusId: Long,
+    val title: String
 ) {
 
 

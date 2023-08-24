@@ -9,6 +9,7 @@ import ru.itcompany.repository.appeal.AppealRepository
 import ru.itcompany.repository.status.StatusRepository
 import ru.itcompany.repository.user.UserRepository
 import ru.itcompany.service.appeal.argument.CreateAppealArgument
+import ru.itcompany.service.appeal.argument.DeleteAppealArgument
 import ru.itcompany.service.appeal.argument.UpdateAppealArgument
 
 
@@ -39,6 +40,8 @@ class AppealServiceImpl(
             this.status = status
             userEmployee = employee
             title = argument.title
+            userDelete = null
+            deleteReason = null
         })
     }
 
@@ -58,10 +61,13 @@ class AppealServiceImpl(
         appeal.title = argument.title
         return appealRepository.update(appeal)
     }
-    override fun delete(id: Long) {
+    override fun delete(id: Long, argument: DeleteAppealArgument) {
         val appeal = appealRepository.getFirstBy{ it: AppealDao ->
             it.id eq id
         }
+        val user = userRepository.getFirstBy { it.id eq argument.userDeleteId }
+        appeal.deleteReason = argument.deleteReason
+        appeal.userDelete = user
          appealRepository.delete(appeal)
     }
 

@@ -4,6 +4,7 @@ import ru.itcompany.model.Appeal
 import ru.itcompany.model.Status
 import ru.itcompany.model.User
 import ru.itcompany.service.appeal.argument.CreateAppealArgument
+import ru.itcompany.service.appeal.argument.DeleteAppealArgument
 import ru.itcompany.service.appeal.argument.UpdateAppealArgument
 import ru.itcompany.service.status.argument.CreateStatusArgument
 import ru.itcompany.service.status.argument.UpdateStatusArgument
@@ -20,5 +21,5 @@ interface AppealService {
 
     fun update(id: Long, argument: UpdateAppealArgument): Appeal
 
-    fun delete(id: Long)
+    fun delete(id: Long, argument: DeleteAppealArgument)
 }

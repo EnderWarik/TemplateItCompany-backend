@@ -18,6 +18,8 @@ object AppealDao : Table<Appeal>("appeals") {
     val userEmployeeId = long("user_employee_id").references(UserDao) { it.userEmployee }
     val statusId = long("status_id").references(StatusDao) { it.status }
     val title = varchar("title").bindTo{ it.title }
+    val userDeleteId = long("user_delete_id").references(UserDao) { it.userDelete }
+    val deleteReason = varchar("delete_reason").bindTo{ it.deleteReason }
     val isDeleted = boolean("is_deleted").bindTo { it.isDeleted }
     val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
 }
