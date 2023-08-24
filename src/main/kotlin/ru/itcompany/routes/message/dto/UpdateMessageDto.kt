@@ -5,7 +5,7 @@ import ru.itcompany.model.enum.StatusAppealEnum
 import ru.itcompany.model.enum.UserRoleEnum
 @Serializable
 class UpdateMessageDto(
-    var appealId: Long,
-    var ownerId: Long,
-    var content: String
+    val appealId: Long,
+    val ownerId: Long,
+    val content: String
 )
