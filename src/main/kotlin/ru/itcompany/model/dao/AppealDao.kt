@@ -7,6 +7,7 @@ import org.ktorm.schema.*
 import ru.itcompany.model.Appeal
 import ru.itcompany.model.Status
 import ru.itcompany.model.User
+import ru.itcompany.model.dao.UserDao.bindTo
 import ru.itcompany.model.enum.StatusAppealEnum
 import java.time.Instant
 
@@ -17,6 +18,7 @@ object AppealDao : Table<Appeal>("appeals") {
     val userEmployeeId = long("user_employee_id").references(UserDao) { it.userEmployee }
     val statusId = long("status_id").references(StatusDao) { it.status }
     val title = varchar("title").bindTo{ it.title }
+    val isDeleted = boolean("is_deleted").bindTo { it.isDeleted }
     val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
 }
 

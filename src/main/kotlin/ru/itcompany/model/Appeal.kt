@@ -22,7 +22,8 @@ interface Appeal : Entity<Appeal> {
     var userEmployee: User?
     var status: Status
     var title: String
-    var dateCreate: Instant
+    var isDeleted: Boolean
+    val dateCreate: Instant
 
 
 }

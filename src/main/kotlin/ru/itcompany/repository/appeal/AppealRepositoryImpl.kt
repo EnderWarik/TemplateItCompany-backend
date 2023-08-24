@@ -20,14 +20,14 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
 
     override fun getAllBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): List<Appeal> {
         return database.safeTransaction {
-            it.appeals.filter(predicate).toList()
+            it.appeals.filter(predicate).filter { it.isDeleted eq false }.toList()
         }
     }
 
     override fun getAll() : List<Appeal>
     {
         return database.safeTransaction {
-            it.appeals.toList()
+            it.appeals.filter { it.isDeleted eq false }.toList()
         }
     }
 
@@ -42,18 +42,20 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
                 } ?: ap.userEmployeeId.isNull()
                 (ap.userCreatorId eq appeal.userCreator.id) and
                         (ap.statusId eq appeal.status.id)
-            }.sortedByDescending { it.dateCreate }.first()
+            }.sortedByDescending { it.dateCreate }
+                .filter { it.isDeleted eq false }
+                .first()
         }
     }
 
     override fun getFirstBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal {
         return database.safeTransaction {
-            it.appeals.filter(predicate).firstOrNull()
+            it.appeals.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         } ?: throw AppealNotFoundException("Appeal not exists")
     }
     override fun  getFirstOrNullBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal? {
         return database.safeTransaction {
-            it.appeals.filter(predicate).firstOrNull()
+            it.appeals.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         }
     }
     override fun update(appeal: Appeal): Appeal {
@@ -62,7 +64,8 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
     }
 
     override fun delete(appeal: Appeal) {
-        appeal.delete()
+        appeal.isDeleted = true
+        appeal.flushChanges()
     }
 }
 

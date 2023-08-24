@@ -21,7 +21,8 @@ interface Message : Entity<Message> {
     var appeal: Appeal
     var owner: User
     var content: String
-    var dateCreate: Instant
+    var isDeleted: Boolean
+    val dateCreate: Instant
 
 
 }

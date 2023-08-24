@@ -18,14 +18,14 @@ import ru.itcompany.model.dao.users
 class StatusRepositoryImpl(private val database: Database) : StatusRepository {
     override fun getAllBy(predicate: (StatusDao) -> BinaryExpression<Boolean>): List<Status> {
         return database.safeTransaction {
-            it.statuses.filter(predicate).toList()
+            it.statuses.filter(predicate).filter { it.isDeleted eq false }.toList()
         }
     }
 
     override fun getAll() : List<Status>
     {
         return database.safeTransaction {
-            it.statuses.toList()
+            it.statuses.filter { it.isDeleted eq false }.toList()
         }
     }
 
@@ -34,13 +34,17 @@ class StatusRepositoryImpl(private val database: Database) : StatusRepository {
             it.statuses.add(status)
         }
         return database.safeTransaction{
-            it.statuses.filter { it.appealId eq status.appealId }.sortedByDescending { it.dateCreate }.first()
+            it.statuses
+                .filter { it.appealId eq status.appealId }
+                .filter { it.isDeleted eq false }
+                .sortedByDescending { it.dateCreate }
+                .first()
         }
     }
 
     override fun getFirstBy(predicate: (StatusDao) -> BinaryExpression<Boolean>): Status {
         return database.safeTransaction {
-            it.statuses.filter(predicate).firstOrNull()
+            it.statuses.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         } ?: throw StatusNotFoundException("Status not exists")
     }
 
@@ -50,7 +54,8 @@ class StatusRepositoryImpl(private val database: Database) : StatusRepository {
     }
 
     override fun delete(status: Status) {
-        status.delete()
+        status.isDeleted = true
+        status.flushChanges()
     }
 
 

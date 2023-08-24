@@ -8,6 +8,7 @@ import ru.itcompany.model.Appeal
 import ru.itcompany.model.Message
 import ru.itcompany.model.Status
 import ru.itcompany.model.User
+import ru.itcompany.model.dao.UserDao.bindTo
 import ru.itcompany.model.enum.StatusAppealEnum
 import java.time.Instant
 
@@ -17,6 +18,7 @@ object MessageDao : Table<Message>("messages") {
     val appealId = long("appeal_id").references(AppealDao) { it.appeal }
     val ownerId = long("owner_id").references(UserDao) { it.owner }
     val content = varchar("content").bindTo{ it.content }
+    val isDeleted = boolean("is_deleted").bindTo { it.isDeleted }
     val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
 }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import kotlinx.serialization.Serializable
 import org.ktorm.entity.Entity
 import ru.itcompany.model.enum.UserRoleEnum
+import java.time.Instant
 
 
 interface  User : Entity<User> {
@@ -21,6 +22,7 @@ interface  User : Entity<User> {
     var phoneNumber: String?
     var inn: String?
     var organizationName: String?
-
+    var isDeleted: Boolean
+    val dateCreate: Instant
 }
 

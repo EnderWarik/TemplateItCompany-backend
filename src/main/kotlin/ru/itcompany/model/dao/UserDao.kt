@@ -2,11 +2,9 @@ package ru.itcompany.model.dao
 
 import org.ktorm.database.Database
 import org.ktorm.entity.sequenceOf
-import org.ktorm.schema.Table
-import org.ktorm.schema.enum
-import org.ktorm.schema.long
-import org.ktorm.schema.varchar
+import org.ktorm.schema.*
 import ru.itcompany.model.User
+import ru.itcompany.model.dao.AppealDao.bindTo
 import ru.itcompany.model.enum.UserRoleEnum
 
 val Database.users get() = this.sequenceOf(UserDao)
@@ -22,4 +20,6 @@ object UserDao : Table<User>("users") {
     val phoneNumber = varchar("phone_number").bindTo { it.phoneNumber }
     val inn = varchar("inn").bindTo { it.inn }
     val organizationName = varchar("organization_name").bindTo { it.organizationName }
+    val isDeleted = boolean("is_deleted").bindTo { it.isDeleted }
+    val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
 }

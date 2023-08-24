@@ -20,7 +20,8 @@ interface Status : Entity<Status> {
     var id: Long
     var status: StatusAppealEnum
     var appealId: Long
-    var dateCreate: Instant
+    var isDeleted: Boolean
+    val dateCreate: Instant
 
 
 }

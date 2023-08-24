@@ -16,18 +16,18 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
     override fun getAll() : List<User>
     {
         return database.safeTransaction {
-            it.users.toList()
+            it.users.filter { it.isDeleted eq false }.toList()
         }
     }
     override fun getAllBy(predicate: (UserDao) -> BinaryExpression<Boolean>) : List<User>
     {
         return database.safeTransaction {
-            it.users.filter(predicate).toList()
+            it.users.filter(predicate).filter { it.isDeleted eq false }.toList()
         }
     }
     override fun findByEmail(email:String):User?  {
         return database.safeTransaction {
-            it.users.filter { it.email eq email}.firstOrNull()
+            it.users.filter { it.email eq email}.filter { it.isDeleted eq false }.firstOrNull()
         }
     }
 
@@ -42,12 +42,12 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
 
     override fun getFirstBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User {
         return database.safeTransaction {
-            it.users.filter(predicate).firstOrNull()
+            it.users.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         } ?: throw UserNotFoundException("User not exists")
     }
     override fun getFirstOrNullBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User? {
         return database.safeTransaction {
-            it.users.filter(predicate).firstOrNull()
+            it.users.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         }
     }
     override fun update(user: User): User {
@@ -56,7 +56,8 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
     }
 
     override fun delete(user: User) {
-        user.delete()
+        user.isDeleted = true
+        user.flushChanges()
     }
 
 }

@@ -23,14 +23,14 @@ class MessageRepositoryImpl(private val database: Database) : MessageRepository 
 
     override fun getAllBy(predicate: (MessageDao) -> BinaryExpression<Boolean>): List<Message> {
         return database.safeTransaction {
-            it.messages.filter(predicate).toList()
+            it.messages.filter(predicate).filter { it.isDeleted eq false }.toList()
         }
     }
 
     override fun getAll() : List<Message>
     {
         return database.safeTransaction {
-            it.messages.toList()
+            it.messages.filter { it.isDeleted eq false }.toList()
         }
     }
 
@@ -38,18 +38,16 @@ class MessageRepositoryImpl(private val database: Database) : MessageRepository 
         database.safeTransaction {
             it.messages.add(message)
         }
-        return database.safeTransaction{
-            it.messages.filter {ms ->
+        return getFirstBy{ms ->
                 (ms.appealId eq message.appeal.id) and
                         (ms.ownerId eq message.owner.id) and
                         (ms.content eq message.content)
-            }.first()
+            }
         }
-    }
 
     override fun getFirstBy(predicate: (MessageDao) -> BinaryExpression<Boolean>): Message {
         return database.safeTransaction {
-            it.messages.filter(predicate).firstOrNull()
+            it.messages.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         } ?: throw MessageNotFoundException("Message not exists")
     }
 
@@ -59,7 +57,8 @@ class MessageRepositoryImpl(private val database: Database) : MessageRepository 
     }
 
     override fun delete(message: Message) {
-        message.delete()
+        message.isDeleted = true
+        message.flushChanges()
     }
 
 }
