@@ -34,6 +34,21 @@ class JwtManager(val config: ApplicationConfig) {
         }
 
     }
+    fun validateAdminToken(credential:JWTCredential):JWTPrincipal?
+    {
+          return if (credential.payload.getClaim("email").asString() != "" &&
+              credential.payload.audience.contains(jwtAudience) &&
+              credential.payload.issuer.contains(jwtDomain) &&
+              credential.payload.getClaim("role").asString() == "Admin")
+          {
+                JWTPrincipal(credential.payload)
+          }
+          else
+          {
+              null
+          }
+
+    }
     fun create(email:String): String
     {
         return JWT.create()

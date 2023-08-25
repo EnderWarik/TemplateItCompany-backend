@@ -11,16 +11,19 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import ru.itcompany.configurations.configureSerialization
+import ru.itcompany.exeption.AuthenticationException
 import ru.itcompany.routes.user.dto.CreateUserDto
 import ru.itcompany.routes.user.dto.UpdateUserDto
 import ru.itcompany.routes.user.mapper.UserMapper
 import ru.itcompany.service.user.UserService
+import ru.itcompany.utils.JwtManager
 
 
 fun Route.userController() {
     val service: UserService by inject()
     val mapper: UserMapper by inject()
     val objectMapper: ObjectMapper by inject()
+    val jwtManager: JwtManager by inject()
     authenticate("auth-jwt") {
         route("/users")
         {
@@ -44,11 +47,14 @@ fun Route.userController() {
             put("/update/{id}")
             {
                 val id = call.parameters["id"]?.toLong()
+                val token = call.request.headers["Authorization"]?.removePrefix("Bearer ") ?: throw AuthenticationException("Error authorization header")
+                val email = jwtManager.getEmailFromToken(token) ?: throw AuthenticationException("Error authorization header")
                 if(id != null)
                 {
                     service.update(
                         id,
-                        mapper.toUpdateUserArgument(call.receive<UpdateUserDto>())
+                        mapper.toUpdateUserArgument(call.receive<UpdateUserDto>()),
+                        email
                     ).let {
                         call.respond(objectMapper.writeValueAsString(it))
                     }

@@ -21,7 +21,7 @@ object AppealDao : Table<Appeal>("appeals") {
     val userDeleteId = long("user_delete_id").references(UserDao) { it.userDelete }
     val deleteReason = varchar("delete_reason").bindTo{ it.deleteReason }
     val isDeleted = boolean("is_deleted").bindTo { it.isDeleted }
-    val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
+    val dateCreate = jdbcTimestamp("date_create").bindTo { it.dateCreate }
 }
 
 

@@ -26,6 +26,16 @@ fun Application.configureSecurity() {
 
 
         }
+        jwt("only-Admin") {
+            realm = jwtManager.jwtRealm
+            verifier(jwtManager.verifierToken())
+            validate { credential -> jwtManager.validateAdminToken(credential) }
+            challenge { defaultScheme, realm ->
+                call.respond(HttpStatusCode.Unauthorized, "Unauthorized")
+            }
+
+
+        }
     }
 }
 

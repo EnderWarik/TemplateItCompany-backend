@@ -3,9 +3,10 @@ package ru.itcompany.service.user
 import org.ktorm.dsl.eq
 import org.mindrot.jbcrypt.BCrypt
 import ru.itcompany.exeption.user.UserAlreadyExistException
-import ru.itcompany.model.Appeal
+import ru.itcompany.exeption.user.UserNotAccessException
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.UserDao
+import ru.itcompany.model.enum.UserRoleEnum
 import ru.itcompany.repository.user.UserRepository
 import ru.itcompany.service.user.argument.CreateUserArgument
 import ru.itcompany.service.user.argument.UpdateUserArgument
@@ -33,14 +34,18 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
             phoneNumber = argument.phoneNumber
             inn = argument.inn
             organizationName = argument.organizationName
+            isDeleted = false
         })
     }
 
-    override fun update(id: Long, argument: UpdateUserArgument): User {
+    override fun update(id: Long, argument: UpdateUserArgument, email: String): User {
         val user = repository.getFirstBy{ it: UserDao ->
             it.id eq id
         }
-
+        if(user.email !== email && user.role !== UserRoleEnum.Admin)
+        {
+            throw UserNotAccessException("User do not have access")
+        }
         if(user.email != argument.email)
         {
             findByEmail(argument.email)?.let {

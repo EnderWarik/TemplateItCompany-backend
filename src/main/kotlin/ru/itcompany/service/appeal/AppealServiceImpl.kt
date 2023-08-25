@@ -42,6 +42,7 @@ class AppealServiceImpl(
             title = argument.title
             userDelete = null
             deleteReason = null
+            isDeleted = false
         })
     }
 

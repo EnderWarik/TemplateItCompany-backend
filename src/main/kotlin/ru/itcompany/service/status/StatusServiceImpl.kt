@@ -24,6 +24,7 @@ class StatusServiceImpl(private val repository: StatusRepository) : StatusServic
        return repository.create(Status{
            status = argument.status
            appealId = argument.appealId
+           isDeleted = false
        })
     }
 

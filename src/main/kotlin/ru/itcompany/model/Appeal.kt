@@ -12,12 +12,12 @@ import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
 import java.util.Date
+import kotlin.reflect.KClass
 
 
 interface Appeal : Entity<Appeal> {
-
     companion object : Entity.Factory<Appeal>()
-    val id: Long
+    var id: Long
     var userCreator: User
     var userEmployee: User?
     var status: Status
@@ -25,8 +25,5 @@ interface Appeal : Entity<Appeal> {
     var userDelete: User?
     var deleteReason: String?
     var isDeleted: Boolean
-    val dateCreate: Instant
-
-
+    var dateCreate: Timestamp
 }
-

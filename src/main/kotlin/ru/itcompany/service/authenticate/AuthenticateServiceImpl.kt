@@ -34,6 +34,7 @@ class AuthenticateServiceImpl(private val repository: UserRepository,private val
             phoneNumber= argument.phoneNumber
             inn= argument.inn
             organizationName= argument.organizationName
+            isDeleted = false
         })
         return jwtManager.create(argument.email)
     }

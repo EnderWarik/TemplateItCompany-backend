@@ -13,5 +13,5 @@ object StatusDao : Table<Status>("statuses") {
     val status = enum<StatusAppealEnum>("status").bindTo { it.status }
     val appealId = long("appeal_id").bindTo { it.appealId }
     val isDeleted = boolean("is_deleted").bindTo { it.isDeleted }
-    val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
+    val dateCreate = jdbcTimestamp("date_create").bindTo { it.dateCreate }
 }

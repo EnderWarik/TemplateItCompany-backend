@@ -21,5 +21,5 @@ object UserDao : Table<User>("users") {
     val inn = varchar("inn").bindTo { it.inn }
     val organizationName = varchar("organization_name").bindTo { it.organizationName }
     val isDeleted = boolean("is_deleted").bindTo { it.isDeleted }
-    val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
+    val dateCreate = jdbcTimestamp("date_create").bindTo { it.dateCreate }
 }

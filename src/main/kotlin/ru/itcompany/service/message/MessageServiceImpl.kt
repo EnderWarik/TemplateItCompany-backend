@@ -32,6 +32,7 @@ class MessageServiceImpl(
             this.appeal = appeal
             this.owner = owner
             content = argument.content
+            isDeleted = false
         })
     }
 

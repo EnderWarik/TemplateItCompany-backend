@@ -19,7 +19,7 @@ object MessageDao : Table<Message>("messages") {
     val ownerId = long("owner_id").references(UserDao) { it.owner }
     val content = varchar("content").bindTo{ it.content }
     val isDeleted = boolean("is_deleted").bindTo { it.isDeleted }
-    val dateCreate = timestamp("date_create").bindTo { it.dateCreate }
+    val dateCreate = jdbcTimestamp("date_create").bindTo { it.dateCreate }
 }
 
 

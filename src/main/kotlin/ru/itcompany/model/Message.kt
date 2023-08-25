@@ -22,7 +22,7 @@ interface Message : Entity<Message> {
     var owner: User
     var content: String
     var isDeleted: Boolean
-    val dateCreate: Instant
+    val dateCreate: Timestamp
 
 
 }

@@ -1,5 +1,6 @@
 package ru.itcompany.utils
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -41,6 +42,7 @@ val koinModules = module {
         .registerModule(KtormModule())
         .registerModule(JavaTimeModule())
         .setDateFormat(SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"))
+        .setSerializationInclusion(JsonInclude.Include.ALWAYS)
     }
     factory{UserMapper() }
     factory{StatusMapper() }

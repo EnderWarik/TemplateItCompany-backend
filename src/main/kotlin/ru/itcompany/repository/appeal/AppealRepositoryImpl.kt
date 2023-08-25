@@ -1,9 +1,7 @@
 package ru.itcompany.repository.appeal
 
 import org.ktorm.database.Database
-import org.ktorm.dsl.and
-import org.ktorm.dsl.eq
-import org.ktorm.dsl.isNull
+import org.ktorm.dsl.*
 import org.ktorm.entity.*
 import org.ktorm.expression.BinaryExpression
 import ru.itcompany.db.safeTransaction
@@ -14,7 +12,7 @@ import ru.itcompany.model.Appeal
 import ru.itcompany.model.Status
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.*
-
+import java.sql.Timestamp
 
 class AppealRepositoryImpl(private val database: Database) : AppealRepository {
 
@@ -27,7 +25,19 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
     override fun getAll() : List<Appeal>
     {
         return database.safeTransaction {
-            it.appeals.filter { it.isDeleted eq false }.toList()
+            it.appeals.filter { it.isDeleted eq false }.map {
+                Appeal{
+                    id = it.id
+                    userCreator = it.userCreator
+                    this.status = it.status
+                    userEmployee = it.userEmployee
+                    title = it.title
+                    userDelete = it.userDelete
+                    deleteReason = it.deleteReason
+                    isDeleted = it.isDeleted
+                    dateCreate = it.dateCreate
+                }
+            }.toList()
         }
     }
 
