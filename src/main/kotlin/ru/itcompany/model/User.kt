@@ -12,7 +12,7 @@ import java.time.Instant
 interface  User : Entity<User> {
 
     companion object : Entity.Factory<User>()
-    val id: Long
+    var id: Long
     var email: String
     var password: String
     var role: UserRoleEnum
@@ -24,6 +24,6 @@ interface  User : Entity<User> {
     var inn: String?
     var organizationName: String?
     var isDeleted: Boolean
-    val dateCreate: Timestamp
+    var dateCreate: Timestamp
 }
 

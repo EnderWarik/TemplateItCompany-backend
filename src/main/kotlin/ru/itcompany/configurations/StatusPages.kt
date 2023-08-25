@@ -21,5 +21,8 @@ fun Application.configureStatusPages() {
         exception<UserAlreadyExistException> { call, cause ->
             call.respond(status = HttpStatusCode.Conflict, message = cause.message ?: "User already exist")
         }
+        exception<UrlException> { call, cause ->
+            call.respond(status = HttpStatusCode.BadRequest, message = cause.message ?: "Url bad variables")
+        }
     }
 }

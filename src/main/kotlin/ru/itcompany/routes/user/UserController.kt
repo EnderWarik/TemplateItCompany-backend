@@ -12,6 +12,7 @@ import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 import ru.itcompany.configurations.configureSerialization
 import ru.itcompany.exeption.AuthenticationException
+import ru.itcompany.exeption.UrlException
 import ru.itcompany.routes.user.dto.CreateUserDto
 import ru.itcompany.routes.user.dto.UpdateUserDto
 import ru.itcompany.routes.user.mapper.UserMapper
@@ -76,6 +77,12 @@ fun Route.userController() {
                 {
                     call.respond(HttpStatusCode.BadRequest)
                 }
+            }
+            get("/{offset}/{limit}")
+            {
+                val offset = call.parameters["offset"]?.toInt() ?: throw UrlException("Offset is not correct")
+                val limit = call.parameters["limit"]?.toInt() ?: throw UrlException("Limit is not correct")
+                service.getFromTo(offset, limit)
             }
         }
     }

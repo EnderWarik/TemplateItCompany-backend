@@ -9,7 +9,7 @@ import ru.itcompany.service.user.argument.UpdateUserArgument
 interface UserService {
     fun getAll(): List<User>
     fun findByEmail(email: String): User?
-
+    fun getFromTo(offset: Int, limit: Int): List<User>
     fun create(argument: CreateUserArgument): User
 
     fun update(id: Long, argument: UpdateUserArgument, email: String): User

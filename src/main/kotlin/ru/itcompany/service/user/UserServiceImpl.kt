@@ -21,6 +21,10 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
         return repository.getFirstOrNullBy{it.email eq email}
     }
 
+    override fun getFromTo(offset: Int, limit: Int): List<User> {
+        return repository.getFromTo(offset,limit)
+    }
+
     override fun create(argument: CreateUserArgument): User {
         repository.findByEmail(argument.email)?.let { throw UserAlreadyExistException("User already exist") }
         return repository.create(User{
