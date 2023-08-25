@@ -23,8 +23,7 @@ fun main(args: Array<String>): Unit
 fun Application.module() {
     val dataSource = DatabaseHikariDataSource(environment.config).get()
     val database: Database = Database.connect(dataSource)
-    val flyway = Flyway.configure().cleanDisabled(false).dataSource(dataSource).load()
-    flyway.clean()
+    val flyway = Flyway.configure().dataSource(dataSource).load()
     flyway.migrate()
 
     val applicationModule = module{

@@ -13,6 +13,8 @@ interface UserRepository {
 
     fun getFromTo(offset: Int, limit: Int): List<User>
 
+    fun totalRecords(): Int
+
     fun create(user: User): User
 
     fun getFirstBy(predicate: (UserDao) -> BinaryExpression<Boolean>): User

@@ -10,6 +10,7 @@ import ru.itcompany.model.enum.UserRoleEnum
 import ru.itcompany.repository.user.UserRepository
 import ru.itcompany.service.user.argument.CreateUserArgument
 import ru.itcompany.service.user.argument.UpdateUserArgument
+import ru.itcompany.service.user.response.UsersResponse
 
 
 class UserServiceImpl(private val repository: UserRepository) : UserService {
@@ -21,8 +22,12 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
         return repository.getFirstOrNullBy{it.email eq email}
     }
 
-    override fun getFromTo(offset: Int, limit: Int): List<User> {
-        return repository.getFromTo(offset,limit)
+    override fun getFromTo(offset: Int, limit: Int): UsersResponse {
+        return UsersResponse(
+            values = repository.getFromTo(offset,limit),
+            totalRecords = repository.totalRecords()
+        )
+
     }
 
     override fun create(argument: CreateUserArgument): User {

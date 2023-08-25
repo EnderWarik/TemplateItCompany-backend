@@ -4,12 +4,13 @@ import ru.itcompany.model.Appeal
 import ru.itcompany.model.User
 import ru.itcompany.service.user.argument.CreateUserArgument
 import ru.itcompany.service.user.argument.UpdateUserArgument
+import ru.itcompany.service.user.response.UsersResponse
 
 
 interface UserService {
     fun getAll(): List<User>
     fun findByEmail(email: String): User?
-    fun getFromTo(offset: Int, limit: Int): List<User>
+    fun getFromTo(offset: Int, limit: Int): UsersResponse
     fun create(argument: CreateUserArgument): User
 
     fun update(id: Long, argument: UpdateUserArgument, email: String): User

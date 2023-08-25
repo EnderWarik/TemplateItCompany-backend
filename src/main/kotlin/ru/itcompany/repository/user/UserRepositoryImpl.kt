@@ -51,8 +51,13 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
                      isDeleted = it[UserDao.isDeleted]!!
                      dateCreate = it[UserDao.dateCreate]!!
                 }
-
             }
+        }
+    }
+
+    override fun totalRecords(): Int {
+        return  database.safeTransaction {
+            it.users.totalRecordsInAllPages
         }
     }
 
