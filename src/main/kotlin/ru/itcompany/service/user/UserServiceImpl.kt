@@ -23,7 +23,7 @@ class UserServiceImpl(private val repository: UserRepository) : UserService
 
     override fun findByEmail(email: String): User?
     {
-        return repository.getFirstOrNullBy { it.email eq email }
+        return repository.findByEmail(email)
     }
 
     override fun getFromTo(offset: Int, limit: Int): PaginationResponse<User>
@@ -58,12 +58,12 @@ class UserServiceImpl(private val repository: UserRepository) : UserService
         })
     }
 
-    override fun update(id: Long, argument: UpdateUserArgument, email: String): User
+    override fun update(id: Long, argument: UpdateUserArgument, updaterEmail: String): User
     {
         val user = repository.getFirstBy { it: UserDao ->
             it.id eq id
         }
-        if (user.email !== email && user.role !== UserRoleEnum.Admin)
+        if (user.email !== updaterEmail && user.role !== UserRoleEnum.Admin)
         {
             throw UserNotAccessException("User do not have access")
         }

@@ -11,7 +11,13 @@ import ru.itcompany.model.User
 import ru.itcompany.model.enum.UserRoleEnum
 import ru.itcompany.repository.user.UserRepositoryImpl
 import ru.itcompany.service.authenticate.argument.AuthenticateArgument
+import ru.itcompany.service.user.argument.RegisterUserArgument
 import ru.itcompany.utils.JwtManager
+import java.sql.Timestamp
+import java.time.Instant
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class AuthenticateServiceImplTest
 {
@@ -46,9 +52,9 @@ class AuthenticateServiceImplTest
         val captor = slot<String>()
 
         val result = service.authenticate(argument)
-
         coVerify { repository.findByEmail(capture(captor)) }
 
+        Assertions.assertEquals(captor.captured,argument.email)
         Assertions.assertEquals(token, result)
         Assertions.assertEquals(argument.email, captor.captured)
     }
@@ -56,5 +62,47 @@ class AuthenticateServiceImplTest
     @Test
     fun register()
     {
+        val argument: RegisterUserArgument = RegisterUserArgument.Builder()
+            .email("root@mail.ru")
+            .password("root")
+            .role(UserRoleEnum.Admin)
+            .firstName("Alex")
+            .lastName("Alex lastname")
+            .thirdName("Alex thirdName")
+            .address("Alex address")
+            .phoneNumber("123")
+            .inn("123")
+            .organizationName("org name")
+            .build()
+
+        every { jwtManager.create(argument.email) } returns "some token ${argument.email}"
+        val token = jwtManager.create(argument.email)
+
+        val findUser = User {
+            id = 1
+            email = argument.email
+            password = BCrypt.hashpw(argument.password, BCrypt.gensalt())
+            role = argument.role
+            firstName = argument.firstName
+            lastName = argument.lastName
+            thirdName = argument.thirdName
+            address = argument.address
+            phoneNumber = argument.phoneNumber
+            inn = argument.inn
+            organizationName = argument.organizationName
+            isDeleted = false
+            dateCreate = Timestamp(System.currentTimeMillis())
+        }
+        every { repository.findByEmail(argument.email) } returns null
+        every { repository.create(any()) } returns findUser
+
+        val captor = slot<String>()
+
+        val result = service.register(argument)
+
+        coVerify { repository.findByEmail(capture(captor)) }
+
+        Assertions.assertEquals(token, result)
+        Assertions.assertEquals(argument.email, captor.captured)
     }
 }

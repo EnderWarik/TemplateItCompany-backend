@@ -16,7 +16,7 @@ interface UserService
 
     fun create(argument: CreateUserArgument): User
 
-    fun update(id: Long, argument: UpdateUserArgument, email: String): User
+    fun update(id: Long, argument: UpdateUserArgument, updaterEmail: String): User
 
     fun delete(id: Long)
 }
