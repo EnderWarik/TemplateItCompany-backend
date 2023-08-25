@@ -1,6 +1,6 @@
 package ru.itcompany.model.enum
 
-enum class StatusAppealEnum() {
+enum class StatusAppealEnum()
+{
     PendingReview, Reviewed, PendingResponse, Closed;
-
 }

@@ -1,33 +1,32 @@
 package ru.itcompany.repository.appeal
 
 import org.ktorm.database.Database
-import org.ktorm.dsl.*
+import org.ktorm.dsl.and
+import org.ktorm.dsl.eq
+import org.ktorm.dsl.isNull
 import org.ktorm.entity.*
 import org.ktorm.expression.BinaryExpression
 import ru.itcompany.db.safeTransaction
 import ru.itcompany.exeption.appeal.AppealNotFoundException
-import ru.itcompany.exeption.status.StatusNotFoundException
-import ru.itcompany.exeption.user.UserNotFoundException
 import ru.itcompany.model.Appeal
-import ru.itcompany.model.Message
-import ru.itcompany.model.Status
-import ru.itcompany.model.User
-import ru.itcompany.model.dao.*
-import java.sql.Timestamp
+import ru.itcompany.model.dao.AppealDao
+import ru.itcompany.model.dao.appeals
 
-class AppealRepositoryImpl(private val database: Database) : AppealRepository {
+class AppealRepositoryImpl(private val database: Database) : AppealRepository
+{
 
-    override fun getAllBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): List<Appeal> {
+    override fun getAllBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): List<Appeal>
+    {
         return database.safeTransaction {
             it.appeals.filter(predicate).filter { it.isDeleted eq false }.toList()
         }
     }
 
-    override fun getAll() : List<Appeal>
+    override fun getAll(): List<Appeal>
     {
         return database.safeTransaction {
             it.appeals.filter { it.isDeleted eq false }.map {
-                Appeal{
+                Appeal {
                     id = it.id
                     userCreator = it.userCreator
                     this.status = it.status
@@ -41,23 +40,28 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
             }.toList()
         }
     }
-    override fun getFromTo(offset: Int, limit: Int): List<Appeal> {
+
+    override fun getFromTo(offset: Int, limit: Int): List<Appeal>
+    {
         return database.safeTransaction {
             it.appeals.drop(offset).take(limit).toList()
         }
     }
 
-    override fun totalRecords(): Int {
-        return  database.safeTransaction {
+    override fun totalRecords(): Int
+    {
+        return database.safeTransaction {
             it.appeals.totalRecordsInAllPages
         }
     }
-    override fun create(appeal: Appeal): Appeal {
+
+    override fun create(appeal: Appeal): Appeal
+    {
         database.safeTransaction {
             it.appeals.add(appeal)
         }
-        return database.safeTransaction{
-            it.appeals.filter {ap ->
+        return database.safeTransaction {
+            it.appeals.filter { ap ->
                 appeal.userEmployee?.let {
                     ap.userEmployeeId eq appeal.userEmployee!!.id
                 } ?: ap.userEmployeeId.isNull()
@@ -69,22 +73,28 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
         }
     }
 
-    override fun getFirstBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal {
+    override fun getFirstBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal
+    {
         return database.safeTransaction {
             it.appeals.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         } ?: throw AppealNotFoundException("Appeal not exists")
     }
-    override fun  getFirstOrNullBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal? {
+
+    override fun getFirstOrNullBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal?
+    {
         return database.safeTransaction {
             it.appeals.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         }
     }
-    override fun update(appeal: Appeal): Appeal {
+
+    override fun update(appeal: Appeal): Appeal
+    {
         appeal.flushChanges()
         return appeal
     }
 
-    override fun delete(appeal: Appeal) {
+    override fun delete(appeal: Appeal)
+    {
         appeal.isDeleted = true
         appeal.flushChanges()
     }

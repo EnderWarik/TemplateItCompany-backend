@@ -12,7 +12,8 @@ import ru.itcompany.routes.authorization.mapper.AuthenticateMapper
 import ru.itcompany.service.authenticate.AuthenticateService
 
 
-fun Route.authorizationController() {
+fun Route.authorizationController()
+{
     val service: AuthenticateService by inject()
     val mapper = AuthenticateMapper()
     route("/auth")

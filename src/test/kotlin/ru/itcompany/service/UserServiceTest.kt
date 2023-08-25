@@ -2,13 +2,13 @@ package ru.itcompany.service
 
 import org.junit.Test
 
-class UserServiceTest {
-
-
+class UserServiceTest
+{
 
 
     @Test
-    fun create() {
+    fun create()
+    {
 
     }
 

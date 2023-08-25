@@ -12,13 +12,10 @@ import ru.itcompany.exeption.UrlException
 import ru.itcompany.routes.status.dto.CreateStatusDto
 import ru.itcompany.routes.status.dto.UpdateStatusDto
 import ru.itcompany.routes.status.mapper.StatusMapper
-import ru.itcompany.routes.user.dto.CreateUserDto
-import ru.itcompany.routes.user.dto.UpdateUserDto
-import ru.itcompany.routes.user.mapper.UserMapper
 import ru.itcompany.service.status.StatusService
-import ru.itcompany.service.user.UserService
 
-fun Route.statusController() {
+fun Route.statusController()
+{
     val service: StatusService by inject()
     val mapper: StatusMapper by inject()
     val objectMapper: ObjectMapper by inject()
@@ -52,7 +49,7 @@ fun Route.statusController() {
             put("/update/{id}")
             {
                 val id = call.parameters["id"]?.toLong()
-                if(id != null)
+                if (id != null)
                 {
                     service.update(
                         id,
@@ -60,8 +57,7 @@ fun Route.statusController() {
                     ).let {
                         call.respond(objectMapper.writeValueAsString(it))
                     }
-                }
-                else
+                } else
                 {
                     call.respond(HttpStatusCode.BadRequest)
                 }
@@ -69,12 +65,11 @@ fun Route.statusController() {
             delete("/delete/{id}")
             {
                 val id = call.parameters["id"]?.toLong()
-                if(id != null)
+                if (id != null)
                 {
                     service.delete(id)
                     call.respond(HttpStatusCode.OK)
-                }
-                else
+                } else
                 {
                     call.respond(HttpStatusCode.BadRequest)
                 }

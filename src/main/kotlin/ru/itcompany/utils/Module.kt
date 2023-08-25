@@ -2,7 +2,6 @@ package ru.itcompany.utils
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
@@ -14,7 +13,6 @@ import ru.itcompany.repository.message.MessageRepository
 import ru.itcompany.repository.message.MessageRepositoryImpl
 import ru.itcompany.repository.status.StatusRepository
 import ru.itcompany.repository.status.StatusRepositoryImpl
-
 import ru.itcompany.repository.user.UserRepository
 import ru.itcompany.repository.user.UserRepositoryImpl
 import ru.itcompany.routes.appeal.mapper.AppealMapper
@@ -36,25 +34,25 @@ import java.text.SimpleDateFormat
 val koinModules = module {
     factory<UserRepository> { UserRepositoryImpl(get()) }
     factory<UserService> { UserServiceImpl(get()) }
-    factoryOf(::AuthenticateServiceImpl){ bind<AuthenticateService>() }
-    factory<ObjectMapper>{
+    factoryOf(::AuthenticateServiceImpl) { bind<AuthenticateService>() }
+    factory<ObjectMapper> {
         ObjectMapper()
-        .registerModule(KtormModule())
-        .registerModule(JavaTimeModule())
-        .setDateFormat(SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"))
-        .setSerializationInclusion(JsonInclude.Include.ALWAYS)
+            .registerModule(KtormModule())
+            .registerModule(JavaTimeModule())
+            .setDateFormat(SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"))
+            .setSerializationInclusion(JsonInclude.Include.ALWAYS)
     }
-    factory{UserMapper() }
-    factory{StatusMapper() }
+    factory { UserMapper() }
+    factory { StatusMapper() }
     factory<StatusRepository> { StatusRepositoryImpl(get()) }
     factory<StatusService> { StatusServiceImpl(get()) }
 
-    factory{AppealMapper() }
+    factory { AppealMapper() }
     factory<AppealRepository> { AppealRepositoryImpl(get()) }
-    factoryOf(::AppealServiceImpl){ bind<AppealService>() }
+    factoryOf(::AppealServiceImpl) { bind<AppealService>() }
 
-    factory{MessageMapper() }
+    factory { MessageMapper() }
     factory<MessageRepository> { MessageRepositoryImpl(get()) }
-    factoryOf(::MessageServiceImpl){ bind<MessageService>() }
+    factoryOf(::MessageServiceImpl) { bind<MessageService>() }
 
 }

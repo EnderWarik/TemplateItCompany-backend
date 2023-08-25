@@ -1,6 +1,7 @@
 package ru.itcompany
 
-class ApplicationTest {
+class ApplicationTest
+{
 //    @Test
 //    fun testRoot() = testApplication {
 //        application {

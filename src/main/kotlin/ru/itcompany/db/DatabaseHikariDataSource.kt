@@ -1,19 +1,22 @@
 package ru.itcompany.db
 
-import com.zaxxer.hikari.*
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.*
+import java.io.File
 
-import java.io.*
+class DatabaseHikariDataSource(config: ApplicationConfig)
+{
+    private var hikariDataSource: HikariDataSource
 
-class DatabaseHikariDataSource(var config: ApplicationConfig) {
-    private var hikariDataSource:HikariDataSource
-    init {
+    init
+    {
         val password = config.property("ktor.storage.password").getString()
         val user = config.property("ktor.storage.user").getString()
         val host = config.property("ktor.storage.host").getString()
-        val port =   config.property("ktor.storage.port").getString()
+        val port = config.property("ktor.storage.port").getString()
         val dbFilePath = config.propertyOrNull("ktor.storage.dbFilePath")?.getString()
-        val driver  = config.property("ktor.storage.driver").getString()
+        val driver = config.property("ktor.storage.driver").getString()
         val jdbcURL = " jdbc:postgresql://" +
                 host +
                 ":" +
@@ -23,10 +26,10 @@ class DatabaseHikariDataSource(var config: ApplicationConfig) {
                     File(it).canonicalFile.absolutePath
                 } ?: "")
         hikariDataSource = createHikariDataSource(
-        url = jdbcURL,
-        dbPassword = password,
-        dbUser = user,
-        driver = driver
+            url = jdbcURL,
+            dbPassword = password,
+            dbUser = user,
+            driver = driver
         )
 
     }

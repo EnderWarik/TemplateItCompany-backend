@@ -1,71 +1,75 @@
 package ru.itcompany.repository.message
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException
 import org.ktorm.database.Database
-import org.ktorm.dsl.*
+import org.ktorm.dsl.and
+import org.ktorm.dsl.eq
 import org.ktorm.entity.*
 import org.ktorm.expression.BinaryExpression
 import ru.itcompany.db.safeTransaction
-import ru.itcompany.exeption.appeal.AppealNotFoundException
 import ru.itcompany.exeption.message.MessageNotFoundException
-import ru.itcompany.exeption.status.StatusNotFoundException
-import ru.itcompany.exeption.user.UserNotFoundException
-import ru.itcompany.model.Appeal
 import ru.itcompany.model.Message
-import ru.itcompany.model.Status
-import ru.itcompany.model.User
-import ru.itcompany.model.dao.*
-import java.sql.Timestamp
+import ru.itcompany.model.dao.MessageDao
+import ru.itcompany.model.dao.messages
 
 
-class MessageRepositoryImpl(private val database: Database) : MessageRepository {
+class MessageRepositoryImpl(private val database: Database) : MessageRepository
+{
 
-    override fun getAllBy(predicate: (MessageDao) -> BinaryExpression<Boolean>): List<Message> {
+    override fun getAllBy(predicate: (MessageDao) -> BinaryExpression<Boolean>): List<Message>
+    {
         return database.safeTransaction {
             it.messages.filter(predicate).filter { it.isDeleted eq false }.toList()
         }
     }
 
-    override fun getAll() : List<Message>
+    override fun getAll(): List<Message>
     {
         return database.safeTransaction {
             it.messages.filter { it.isDeleted eq false }.toList()
         }
     }
-    override fun getFromTo(offset: Int, limit: Int): List<Message> {
+
+    override fun getFromTo(offset: Int, limit: Int): List<Message>
+    {
         return database.safeTransaction {
             it.messages.drop(offset).take(limit).toList()
         }
     }
 
-    override fun totalRecords(): Int {
-        return  database.safeTransaction {
+    override fun totalRecords(): Int
+    {
+        return database.safeTransaction {
             it.messages.totalRecordsInAllPages
         }
     }
-    override fun create(message: Message): Message {
+
+    override fun create(message: Message): Message
+    {
         database.safeTransaction {
             it.messages.add(message)
         }
-        return getFirstBy{ms ->
-                (ms.appealId eq message.appeal.id) and
-                        (ms.ownerId eq message.owner.id) and
-                        (ms.content eq message.content)
-            }
+        return getFirstBy { ms ->
+            (ms.appealId eq message.appeal.id) and
+                    (ms.ownerId eq message.owner.id) and
+                    (ms.content eq message.content)
         }
+    }
 
-    override fun getFirstBy(predicate: (MessageDao) -> BinaryExpression<Boolean>): Message {
+    override fun getFirstBy(predicate: (MessageDao) -> BinaryExpression<Boolean>): Message
+    {
         return database.safeTransaction {
             it.messages.filter(predicate).filter { it.isDeleted eq false }.firstOrNull()
         } ?: throw MessageNotFoundException("Message not exists")
     }
 
-    override fun update(message: Message): Message {
+    override fun update(message: Message): Message
+    {
         message.flushChanges()
         return message
     }
 
-    override fun delete(message: Message) {
+    override fun delete(message: Message)
+    {
         message.isDeleted = true
         message.flushChanges()
     }

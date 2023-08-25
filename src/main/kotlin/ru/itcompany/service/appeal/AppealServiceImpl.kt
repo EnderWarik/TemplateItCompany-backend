@@ -1,7 +1,6 @@
 package ru.itcompany.service.appeal
 
 import org.ktorm.dsl.eq
-import org.ktorm.dsl.isNull
 import ru.itcompany.model.Appeal
 import ru.itcompany.model.Meta
 import ru.itcompany.model.User
@@ -15,42 +14,48 @@ import ru.itcompany.service.appeal.argument.DeleteAppealArgument
 import ru.itcompany.service.appeal.argument.UpdateAppealArgument
 
 
-
 class AppealServiceImpl(
     private val appealRepository: AppealRepository,
     private val statusRepository: StatusRepository,
     private val userRepository: UserRepository
-) : AppealService {
-    override fun getAll(): List<Appeal> {
+) : AppealService
+{
+    override fun getAll(): List<Appeal>
+    {
         return appealRepository.getAll()
     }
 
-    override fun findById(id: Long): Appeal? {
-        return appealRepository.getFirstOrNullBy{ it.id eq id }
+    override fun findById(id: Long): Appeal?
+    {
+        return appealRepository.getFirstOrNullBy { it.id eq id }
     }
 
-    override fun getFromTo(offset: Int, limit: Int): PaginationResponse<Appeal> {
+    override fun getFromTo(offset: Int, limit: Int): PaginationResponse<Appeal>
+    {
         val meta = Meta(
             totalCounts = appealRepository.totalRecords(),
             limit = limit,
             offset = offset
         )
         return PaginationResponse(
-            data = appealRepository.getFromTo(offset,limit),
+            data = appealRepository.getFromTo(offset, limit),
             meta = meta
         )
 
     }
-    override fun create(argument: CreateAppealArgument): Appeal {
+
+    override fun create(argument: CreateAppealArgument): Appeal
+    {
 
         val status = statusRepository.getFirstBy { it.id eq argument.statusId }
         val user = userRepository.getFirstBy { it.id eq argument.userCreatorId }
         var employee: User? = null
-        if(argument.userEmployeeId != null) {
-           employee = userRepository.getFirstBy { it.id eq argument.userEmployeeId }
+        if (argument.userEmployeeId != null)
+        {
+            employee = userRepository.getFirstBy { it.id eq argument.userEmployeeId }
         }
 
-        return appealRepository.create(Appeal{
+        return appealRepository.create(Appeal {
             userCreator = user
             this.status = status
             userEmployee = employee
@@ -61,14 +66,16 @@ class AppealServiceImpl(
         })
     }
 
-    override fun update(id: Long, argument: UpdateAppealArgument): Appeal {
-        val appeal = appealRepository.getFirstBy{ it: AppealDao ->
+    override fun update(id: Long, argument: UpdateAppealArgument): Appeal
+    {
+        val appeal = appealRepository.getFirstBy { it: AppealDao ->
             it.id eq id
         }
         val status = statusRepository.getFirstBy { it.id eq argument.statusId }
         val user = userRepository.getFirstBy { it.id eq argument.userCreatorId }
         var employee: User? = null
-        if(argument.userEmployeeId != null) {
+        if (argument.userEmployeeId != null)
+        {
             employee = userRepository.getFirstBy { it.id eq argument.userEmployeeId }
         }
         appeal.userCreator = user
@@ -77,14 +84,16 @@ class AppealServiceImpl(
         appeal.title = argument.title
         return appealRepository.update(appeal)
     }
-    override fun delete(id: Long, argument: DeleteAppealArgument) {
-        val appeal = appealRepository.getFirstBy{ it: AppealDao ->
+
+    override fun delete(id: Long, argument: DeleteAppealArgument)
+    {
+        val appeal = appealRepository.getFirstBy { it: AppealDao ->
             it.id eq id
         }
         val user = userRepository.getFirstBy { it.id eq argument.userDeleteId }
         appeal.deleteReason = argument.deleteReason
         appeal.userDelete = user
-         appealRepository.delete(appeal)
+        appealRepository.delete(appeal)
     }
 
 

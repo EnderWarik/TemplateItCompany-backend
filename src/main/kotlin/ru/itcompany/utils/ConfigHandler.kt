@@ -2,53 +2,56 @@ package ru.itcompany.utils
 
 import io.ktor.server.config.*
 
-class ConfigHandler( var config:ApplicationConfig) {
+class ConfigHandler(var config: ApplicationConfig)
+{
 
-    fun getInt(property:String) : Int
+    fun getInt(property: String): Int
     {
-        return try {
+        return try
+        {
             config.property(property).getString().toInt()
-        }
-        catch (e:RuntimeException)
+        } catch (e: RuntimeException)
         {
             throw RuntimeException("Отсутствует или неверно указан $property")
         }
 
     }
-    fun getString(property:String) : String
+
+    fun getString(property: String): String
     {
-        return try {
+        return try
+        {
             config.property(property).getString()
-        }
-        catch (e:RuntimeException)
+        } catch (e: RuntimeException)
         {
             throw RuntimeException("Отсутствует или неверно указан $property")
         }
 
     }
-    fun getIntOrNull(property:String) : Int?
+
+    fun getIntOrNull(property: String): Int?
     {
-        return try {
+        return try
+        {
             config.propertyOrNull(property)?.getString()?.toInt()
-        }
-        catch (e:RuntimeException)
+        } catch (e: RuntimeException)
         {
             throw RuntimeException("Неверно указан $property")
         }
 
     }
-    fun getStringOrNull(property:String) : String?
+
+    fun getStringOrNull(property: String): String?
     {
-        return try {
+        return try
+        {
             config.propertyOrNull(property)?.getString()
-        }
-        catch (e:RuntimeException)
+        } catch (e: RuntimeException)
         {
             throw RuntimeException("Неверно указан $property")
         }
 
     }
-
 
 
 }

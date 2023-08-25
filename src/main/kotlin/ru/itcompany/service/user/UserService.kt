@@ -1,14 +1,13 @@
 package ru.itcompany.service.user
 
-import ru.itcompany.model.Appeal
 import ru.itcompany.model.User
 import ru.itcompany.service.PaginationResponse
 import ru.itcompany.service.user.argument.CreateUserArgument
 import ru.itcompany.service.user.argument.UpdateUserArgument
 
 
-
-interface UserService {
+interface UserService
+{
     fun getAll(): List<User>
 
     fun findByEmail(email: String): User?

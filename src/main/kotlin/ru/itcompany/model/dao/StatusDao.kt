@@ -4,11 +4,12 @@ import org.ktorm.database.Database
 import org.ktorm.entity.sequenceOf
 import org.ktorm.schema.*
 import ru.itcompany.model.Status
-import ru.itcompany.model.dao.UserDao.bindTo
 import ru.itcompany.model.enum.StatusAppealEnum
 
 val Database.statuses get() = this.sequenceOf(StatusDao)
-object StatusDao : Table<Status>("statuses") {
+
+object StatusDao : Table<Status>("statuses")
+{
     val id = long("id").primaryKey().bindTo { it.id }
     val status = enum<StatusAppealEnum>("status").bindTo { it.status }
     val appealId = long("appeal_id").bindTo { it.appealId }

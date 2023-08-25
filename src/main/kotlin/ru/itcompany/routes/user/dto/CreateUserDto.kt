@@ -2,6 +2,7 @@ package ru.itcompany.routes.user.dto
 
 import kotlinx.serialization.Serializable
 import ru.itcompany.model.enum.UserRoleEnum
+
 @Serializable
 class CreateUserDto(
     val email: String,

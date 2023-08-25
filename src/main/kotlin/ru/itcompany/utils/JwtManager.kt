@@ -8,14 +8,15 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.config.*
 import java.util.*
 
-class JwtManager(val config: ApplicationConfig) {
+class JwtManager(config: ApplicationConfig)
+{
     private val jwtAudience = config.property("ktor.security.jwt.audience").getString()
     private val jwtDomain = config.property("ktor.security.jwt.issuer").getString()
     val jwtRealm = config.property("ktor.security.jwt.realm").getString()
     private val jwtSecret = config.property("ktor.security.jwt.secret").getString()
     private val jwtIssuer = config.property("ktor.security.jwt.issuer").getString()
     private val lifeRime = config.property("ktor.security.jwt.lifeTimeMS").getString().toInt()
-    fun verifierToken():JWTVerifier
+    fun verifierToken(): JWTVerifier
     {
         return JWT
             .require(Algorithm.HMAC256(jwtSecret))
@@ -23,33 +24,39 @@ class JwtManager(val config: ApplicationConfig) {
             .withIssuer(jwtDomain)
             .build()
     }
-    fun validateToken(credential:JWTCredential):JWTPrincipal?
+
+    fun validateToken(credential: JWTCredential): JWTPrincipal?
     {
-      return  if (credential.payload.getClaim("email").asString() != ""
+        return if (credential.payload.getClaim("email").asString() != ""
             && credential.payload.audience.contains(jwtAudience)
-            && credential.payload.issuer.contains(jwtDomain)) {
+            && credential.payload.issuer.contains(jwtDomain)
+        )
+        {
             JWTPrincipal(credential.payload)
-        } else {
+        } else
+        {
             null
         }
 
     }
-    fun validateAdminToken(credential:JWTCredential):JWTPrincipal?
+
+    fun validateAdminToken(credential: JWTCredential): JWTPrincipal?
     {
-          return if (credential.payload.getClaim("email").asString() != "" &&
-              credential.payload.audience.contains(jwtAudience) &&
-              credential.payload.issuer.contains(jwtDomain) &&
-              credential.payload.getClaim("role").asString() == "Admin")
-          {
-                JWTPrincipal(credential.payload)
-          }
-          else
-          {
-              null
-          }
+        return if (credential.payload.getClaim("email").asString() != "" &&
+            credential.payload.audience.contains(jwtAudience) &&
+            credential.payload.issuer.contains(jwtDomain) &&
+            credential.payload.getClaim("role").asString() == "Admin"
+        )
+        {
+            JWTPrincipal(credential.payload)
+        } else
+        {
+            null
+        }
 
     }
-    fun create(email:String): String
+
+    fun create(email: String): String
     {
         return JWT.create()
             .withAudience(jwtAudience)
@@ -58,11 +65,15 @@ class JwtManager(val config: ApplicationConfig) {
             .withExpiresAt(Date(System.currentTimeMillis() + lifeRime))
             .sign(Algorithm.HMAC256(jwtSecret))
     }
-    fun getEmailFromToken(token: String): String? {
+
+    fun getEmailFromToken(token: String): String?
+    {
         val verifier = verifierToken()
-        val jwt = try {
+        val jwt = try
+        {
             verifier.verify(token)
-        } catch (e: JWTVerificationException) {
+        } catch (e: JWTVerificationException)
+        {
             return null
         }
         return jwt.getClaim("email").asString()

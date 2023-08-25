@@ -1,8 +1,6 @@
 package ru.itcompany.routes.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.fasterxml.jackson.databind.json.JsonMapper
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -10,7 +8,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
-import ru.itcompany.configurations.configureSerialization
 import ru.itcompany.exeption.AuthenticationException
 import ru.itcompany.exeption.UrlException
 import ru.itcompany.routes.user.dto.CreateUserDto
@@ -20,7 +17,8 @@ import ru.itcompany.service.user.UserService
 import ru.itcompany.utils.JwtManager
 
 
-fun Route.userController() {
+fun Route.userController()
+{
     val service: UserService by inject()
     val mapper: UserMapper by inject()
     val objectMapper: ObjectMapper by inject()
@@ -56,9 +54,11 @@ fun Route.userController() {
             put("/update/{id}")
             {
                 val id = call.parameters["id"]?.toLong()
-                val token = call.request.headers["Authorization"]?.removePrefix("Bearer ") ?: throw AuthenticationException("Error authorization header")
-                val email = jwtManager.getEmailFromToken(token) ?: throw AuthenticationException("Error authorization header")
-                if(id != null)
+                val token = call.request.headers["Authorization"]?.removePrefix("Bearer ")
+                    ?: throw AuthenticationException("Error authorization header")
+                val email =
+                    jwtManager.getEmailFromToken(token) ?: throw AuthenticationException("Error authorization header")
+                if (id != null)
                 {
                     service.update(
                         id,
@@ -67,8 +67,7 @@ fun Route.userController() {
                     ).let {
                         call.respond(objectMapper.writeValueAsString(it))
                     }
-                }
-                else
+                } else
                 {
                     call.respond(HttpStatusCode.BadRequest)
                 }
@@ -76,12 +75,11 @@ fun Route.userController() {
             delete("/delete/{id}")
             {
                 val id = call.parameters["id"]?.toLong()
-                if(id != null)
+                if (id != null)
                 {
                     service.delete(id)
                     call.respond(HttpStatusCode.OK)
-                }
-                else
+                } else
                 {
                     call.respond(HttpStatusCode.BadRequest)
                 }

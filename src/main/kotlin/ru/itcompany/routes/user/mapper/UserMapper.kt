@@ -1,12 +1,12 @@
 package ru.itcompany.routes.user.mapper
 
-import ru.itcompany.model.enum.UserRoleEnum
 import ru.itcompany.routes.user.dto.CreateUserDto
 import ru.itcompany.routes.user.dto.UpdateUserDto
 import ru.itcompany.service.user.argument.CreateUserArgument
 import ru.itcompany.service.user.argument.UpdateUserArgument
 
-class UserMapper {
+class UserMapper
+{
 
     fun toUpdateUserArgument(dto: UpdateUserDto): UpdateUserArgument
     {
@@ -23,6 +23,7 @@ class UserMapper {
             .organizationName(dto.organizationName)
             .build()
     }
+
     fun toCreateUserArgument(dto: CreateUserDto): CreateUserArgument
     {
         return CreateUserArgument.Builder()
