@@ -1,7 +1,7 @@
 package ru.itcompany.repository.status
 
 import org.ktorm.database.Database
-import org.ktorm.dsl.eq
+import org.ktorm.dsl.*
 import org.ktorm.entity.*
 import org.ktorm.expression.BinaryExpression
 import ru.itcompany.db.safeTransaction
@@ -13,6 +13,8 @@ import ru.itcompany.model.dao.StatusDao
 import ru.itcompany.model.dao.UserDao
 import ru.itcompany.model.dao.statuses
 import ru.itcompany.model.dao.users
+import ru.itcompany.model.enum.StatusAppealEnum
+import java.sql.Timestamp
 
 
 class StatusRepositoryImpl(private val database: Database) : StatusRepository {
@@ -28,7 +30,17 @@ class StatusRepositoryImpl(private val database: Database) : StatusRepository {
             it.statuses.filter { it.isDeleted eq false }.toList()
         }
     }
+    override fun getFromTo(offset: Int, limit: Int): List<Status> {
+        return database.safeTransaction {
+            it.statuses.drop(offset).take(limit).toList()
+        }
+    }
 
+    override fun totalRecords(): Int {
+        return  database.safeTransaction {
+            it.statuses.totalRecordsInAllPages
+        }
+    }
     override fun create(status: Status): Status {
         database.safeTransaction {
             it.statuses.add(status)

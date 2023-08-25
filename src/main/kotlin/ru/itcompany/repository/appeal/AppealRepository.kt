@@ -13,6 +13,10 @@ interface AppealRepository {
 
     fun getAll() :List<Appeal>
 
+    fun getFromTo(offset: Int, limit: Int): List<Appeal>
+
+    fun totalRecords(): Int
+
     fun create(appeal: Appeal): Appeal
 
     fun getFirstBy(predicate: (AppealDao) -> BinaryExpression<Boolean>): Appeal

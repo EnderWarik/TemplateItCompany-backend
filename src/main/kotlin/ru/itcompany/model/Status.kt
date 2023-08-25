@@ -21,7 +21,7 @@ interface Status : Entity<Status> {
     var status: StatusAppealEnum
     var appealId: Long
     var isDeleted: Boolean
-    val dateCreate: Timestamp
+    var dateCreate: Timestamp
 
 
 }

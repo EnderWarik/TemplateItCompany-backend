@@ -4,16 +4,19 @@ import org.ktorm.dsl.eq
 import org.ktorm.dsl.isNull
 import ru.itcompany.model.Appeal
 import ru.itcompany.model.Message
+import ru.itcompany.model.Meta
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.AppealDao
 import ru.itcompany.repository.appeal.AppealRepository
 import ru.itcompany.repository.message.MessageRepository
 import ru.itcompany.repository.status.StatusRepository
 import ru.itcompany.repository.user.UserRepository
+import ru.itcompany.service.PaginationResponse
 import ru.itcompany.service.appeal.argument.CreateAppealArgument
 import ru.itcompany.service.appeal.argument.UpdateAppealArgument
 import ru.itcompany.service.message.argument.CreateMessageArgument
 import ru.itcompany.service.message.argument.UpdateMessageArgument
+
 
 
 class MessageServiceImpl(
@@ -34,6 +37,19 @@ class MessageServiceImpl(
             content = argument.content
             isDeleted = false
         })
+    }
+
+    override fun getFromTo(offset: Int, limit: Int): PaginationResponse<Message> {
+        val meta = Meta(
+            totalCounts = messageRepository.totalRecords(),
+            limit = limit,
+            offset = offset
+        )
+        return PaginationResponse(
+            data = messageRepository.getFromTo(offset,limit),
+            meta = meta
+        )
+
     }
 
     override fun update(id: Long, argument: UpdateMessageArgument): Message {

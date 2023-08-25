@@ -9,6 +9,7 @@ import ru.itcompany.exeption.appeal.AppealNotFoundException
 import ru.itcompany.exeption.status.StatusNotFoundException
 import ru.itcompany.exeption.user.UserNotFoundException
 import ru.itcompany.model.Appeal
+import ru.itcompany.model.Message
 import ru.itcompany.model.Status
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.*
@@ -40,7 +41,17 @@ class AppealRepositoryImpl(private val database: Database) : AppealRepository {
             }.toList()
         }
     }
+    override fun getFromTo(offset: Int, limit: Int): List<Appeal> {
+        return database.safeTransaction {
+            it.appeals.drop(offset).take(limit).toList()
+        }
+    }
 
+    override fun totalRecords(): Int {
+        return  database.safeTransaction {
+            it.appeals.totalRecordsInAllPages
+        }
+    }
     override fun create(appeal: Appeal): Appeal {
         database.safeTransaction {
             it.appeals.add(appeal)

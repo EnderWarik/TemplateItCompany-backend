@@ -11,6 +11,10 @@ interface StatusRepository {
 
     fun getAll() :List<Status>
 
+    fun getFromTo(offset: Int, limit: Int): List<Status>
+
+    fun totalRecords(): Int
+
     fun create(status: Status): Status
 
     fun getFirstBy(predicate: (StatusDao) -> BinaryExpression<Boolean>): Status

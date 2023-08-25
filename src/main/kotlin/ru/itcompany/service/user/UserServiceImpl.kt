@@ -4,13 +4,15 @@ import org.ktorm.dsl.eq
 import org.mindrot.jbcrypt.BCrypt
 import ru.itcompany.exeption.user.UserAlreadyExistException
 import ru.itcompany.exeption.user.UserNotAccessException
+import ru.itcompany.model.Meta
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.UserDao
 import ru.itcompany.model.enum.UserRoleEnum
 import ru.itcompany.repository.user.UserRepository
+import ru.itcompany.service.PaginationResponse
 import ru.itcompany.service.user.argument.CreateUserArgument
 import ru.itcompany.service.user.argument.UpdateUserArgument
-import ru.itcompany.service.user.response.UsersResponse
+
 
 
 class UserServiceImpl(private val repository: UserRepository) : UserService {
@@ -22,10 +24,15 @@ class UserServiceImpl(private val repository: UserRepository) : UserService {
         return repository.getFirstOrNullBy{it.email eq email}
     }
 
-    override fun getFromTo(offset: Int, limit: Int): UsersResponse {
-        return UsersResponse(
-            values = repository.getFromTo(offset,limit),
-            totalRecords = repository.totalRecords()
+    override fun getFromTo(offset: Int, limit: Int): PaginationResponse<User> {
+        val meta = Meta(
+            totalCounts = repository.totalRecords(),
+            limit = limit,
+            offset = offset
+        )
+        return PaginationResponse(
+            data = repository.getFromTo(offset,limit),
+            meta = meta
         )
 
     }

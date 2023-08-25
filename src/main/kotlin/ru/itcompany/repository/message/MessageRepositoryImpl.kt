@@ -2,9 +2,7 @@ package ru.itcompany.repository.message
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException
 import org.ktorm.database.Database
-import org.ktorm.dsl.and
-import org.ktorm.dsl.eq
-import org.ktorm.dsl.isNull
+import org.ktorm.dsl.*
 import org.ktorm.entity.*
 import org.ktorm.expression.BinaryExpression
 import ru.itcompany.db.safeTransaction
@@ -17,6 +15,7 @@ import ru.itcompany.model.Message
 import ru.itcompany.model.Status
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.*
+import java.sql.Timestamp
 
 
 class MessageRepositoryImpl(private val database: Database) : MessageRepository {
@@ -33,7 +32,17 @@ class MessageRepositoryImpl(private val database: Database) : MessageRepository 
             it.messages.filter { it.isDeleted eq false }.toList()
         }
     }
+    override fun getFromTo(offset: Int, limit: Int): List<Message> {
+        return database.safeTransaction {
+            it.messages.drop(offset).take(limit).toList()
+        }
+    }
 
+    override fun totalRecords(): Int {
+        return  database.safeTransaction {
+            it.messages.totalRecordsInAllPages
+        }
+    }
     override fun create(message: Message): Message {
         database.safeTransaction {
             it.messages.add(message)

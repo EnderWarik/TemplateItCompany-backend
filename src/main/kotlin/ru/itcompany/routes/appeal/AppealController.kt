@@ -8,6 +8,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
+import ru.itcompany.exeption.UrlException
 import ru.itcompany.routes.appeal.dto.CreateAppealDto
 import ru.itcompany.routes.appeal.dto.DeleteAppealDto
 import ru.itcompany.routes.appeal.dto.UpdateAppealDto
@@ -34,6 +35,14 @@ fun Route.appealController() {
             get()
             {
                 service.getAll().let {
+                    call.respond(objectMapper.writeValueAsString(it))
+                }
+            }
+            get("/{offset}/{limit}")
+            {
+                val offset = call.parameters["offset"]?.toInt() ?: throw UrlException("Offset is not correct")
+                val limit = call.parameters["limit"]?.toInt() ?: throw UrlException("Limit is not correct")
+                service.getFromTo(offset, limit).let {
                     call.respond(objectMapper.writeValueAsString(it))
                 }
             }

@@ -17,12 +17,12 @@ import java.util.Date
 
 interface Message : Entity<Message> {
     companion object : Entity.Factory<Message>()
-    val id: Long
+    var id: Long
     var appeal: Appeal
     var owner: User
     var content: String
     var isDeleted: Boolean
-    val dateCreate: Timestamp
+    var dateCreate: Timestamp
 
 
 }

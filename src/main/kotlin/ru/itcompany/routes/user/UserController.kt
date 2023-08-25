@@ -35,6 +35,14 @@ fun Route.userController() {
                     call.respond(objectMapper.writeValueAsString(it))
                 }
             }
+            get("/{offset}/{limit}")
+            {
+                val offset = call.parameters["offset"]?.toInt() ?: throw UrlException("Offset is not correct")
+                val limit = call.parameters["limit"]?.toInt() ?: throw UrlException("Limit is not correct")
+                service.getFromTo(offset, limit).let {
+                    call.respond(objectMapper.writeValueAsString(it))
+                }
+            }
             post("/create")
             {
 
@@ -78,15 +86,7 @@ fun Route.userController() {
                     call.respond(HttpStatusCode.BadRequest)
                 }
             }
-            get("/{offset}/{limit}")
-            {
-                val offset = call.parameters["offset"]?.toInt() ?: throw UrlException("Offset is not correct")
-                val limit = call.parameters["limit"]?.toInt() ?: throw UrlException("Limit is not correct")
-                service.getFromTo(offset, limit).let {
-                    call.respond(objectMapper.writeValueAsString(it))
-                }
 
-            }
         }
     }
 

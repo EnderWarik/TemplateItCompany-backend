@@ -15,6 +15,9 @@ interface MessageRepository {
 
     fun getAll() :List<Message>
 
+    fun getFromTo(offset: Int, limit: Int): List<Message>
+
+    fun totalRecords(): Int
     fun create(message: Message): Message
 
     fun getFirstBy(predicate: (MessageDao) -> BinaryExpression<Boolean>): Message

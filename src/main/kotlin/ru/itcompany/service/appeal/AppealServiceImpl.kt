@@ -3,14 +3,17 @@ package ru.itcompany.service.appeal
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.isNull
 import ru.itcompany.model.Appeal
+import ru.itcompany.model.Meta
 import ru.itcompany.model.User
 import ru.itcompany.model.dao.AppealDao
 import ru.itcompany.repository.appeal.AppealRepository
 import ru.itcompany.repository.status.StatusRepository
 import ru.itcompany.repository.user.UserRepository
+import ru.itcompany.service.PaginationResponse
 import ru.itcompany.service.appeal.argument.CreateAppealArgument
 import ru.itcompany.service.appeal.argument.DeleteAppealArgument
 import ru.itcompany.service.appeal.argument.UpdateAppealArgument
+
 
 
 class AppealServiceImpl(
@@ -26,13 +29,25 @@ class AppealServiceImpl(
         return appealRepository.getFirstOrNullBy{ it.id eq id }
     }
 
+    override fun getFromTo(offset: Int, limit: Int): PaginationResponse<Appeal> {
+        val meta = Meta(
+            totalCounts = appealRepository.totalRecords(),
+            limit = limit,
+            offset = offset
+        )
+        return PaginationResponse(
+            data = appealRepository.getFromTo(offset,limit),
+            meta = meta
+        )
+
+    }
     override fun create(argument: CreateAppealArgument): Appeal {
 
         val status = statusRepository.getFirstBy { it.id eq argument.statusId }
         val user = userRepository.getFirstBy { it.id eq argument.userCreatorId }
         var employee: User? = null
         if(argument.userEmployeeId != null) {
-           employee = userRepository.getFirstBy { it.id eq argument.userEmployeeId!! }
+           employee = userRepository.getFirstBy { it.id eq argument.userEmployeeId }
         }
 
         return appealRepository.create(Appeal{
@@ -54,7 +69,7 @@ class AppealServiceImpl(
         val user = userRepository.getFirstBy { it.id eq argument.userCreatorId }
         var employee: User? = null
         if(argument.userEmployeeId != null) {
-            employee = userRepository.getFirstBy { it.id eq argument.userEmployeeId!! }
+            employee = userRepository.getFirstBy { it.id eq argument.userEmployeeId }
         }
         appeal.userCreator = user
         appeal.status = status
