@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.config.*
+import ru.itcompany.model.enum.UserRoleEnum
 import java.util.*
 
 class JwtManager(config: ApplicationConfig)
@@ -42,6 +43,7 @@ class JwtManager(config: ApplicationConfig)
 
     fun validateAdminToken(credential: JWTCredential): JWTPrincipal?
     {
+        println(credential.payload.getClaim("role").asString())
         return if (credential.payload.getClaim("email").asString() != "" &&
             credential.payload.audience.contains(jwtAudience) &&
             credential.payload.issuer.contains(jwtDomain) &&
@@ -56,15 +58,17 @@ class JwtManager(config: ApplicationConfig)
 
     }
 
-    fun create(email: String): String
+    fun create(email: String, role: UserRoleEnum): String
     {
         return JWT.create()
             .withAudience(jwtAudience)
             .withIssuer(jwtIssuer)
             .withClaim("email", email)
+            .withClaim("role", role.toString())
             .withExpiresAt(Date(System.currentTimeMillis() + lifeRime))
             .sign(Algorithm.HMAC256(jwtSecret))
     }
+
 
     fun getEmailFromToken(token: String): String?
     {

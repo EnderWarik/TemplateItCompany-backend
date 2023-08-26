@@ -18,7 +18,7 @@ class AuthenticateServiceImpl(private val repository: UserRepository, private va
         val user = repository.findByEmail(argument.email)
         if (user !== null && BCrypt.checkpw(argument.password, user.password))
         {
-            return jwtManager.create(argument.email)
+            return jwtManager.create(argument.email, user.role)
         } else throw AuthenticationException("Wrong email or password")
     }
 
@@ -38,7 +38,7 @@ class AuthenticateServiceImpl(private val repository: UserRepository, private va
             organizationName = argument.organizationName
             isDeleted = false
         })
-        return jwtManager.create(argument.email)
+        return jwtManager.create(argument.email, argument.role)
     }
 
 }

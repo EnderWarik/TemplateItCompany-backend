@@ -14,10 +14,6 @@ import ru.itcompany.service.authenticate.argument.AuthenticateArgument
 import ru.itcompany.service.user.argument.RegisterUserArgument
 import ru.itcompany.utils.JwtManager
 import java.sql.Timestamp
-import java.time.Instant
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class AuthenticateServiceImplTest
 {
@@ -36,9 +32,6 @@ class AuthenticateServiceImplTest
             .password("test")
             .build()
 
-        every { jwtManager.create(argument.email) } returns "some token ${argument.email}"
-        val token = jwtManager.create(argument.email)
-
         val findUser = User {
             email = "test@email.ru"
             password = BCrypt.hashpw("test", BCrypt.gensalt())
@@ -46,6 +39,11 @@ class AuthenticateServiceImplTest
             firstName = "FirstName"
             lastName = "lastName"
         }
+
+        every { jwtManager.create(argument.email, findUser.role) } returns "some token ${argument.email}"
+        val token = jwtManager.create(argument.email, findUser.role)
+
+
         every { repository.findByEmail(argument.email) } returns findUser
         every { repository.create(any()) } returns findUser
 
@@ -54,7 +52,7 @@ class AuthenticateServiceImplTest
         val result = service.authenticate(argument)
         coVerify { repository.findByEmail(capture(captor)) }
 
-        Assertions.assertEquals(captor.captured,argument.email)
+        Assertions.assertEquals(captor.captured, argument.email)
         Assertions.assertEquals(token, result)
         Assertions.assertEquals(argument.email, captor.captured)
     }
@@ -75,8 +73,8 @@ class AuthenticateServiceImplTest
             .organizationName("org name")
             .build()
 
-        every { jwtManager.create(argument.email) } returns "some token ${argument.email}"
-        val token = jwtManager.create(argument.email)
+        every { jwtManager.create(argument.email, argument.role) } returns "some token ${argument.email}"
+        val token = jwtManager.create(argument.email, argument.role)
 
         val findUser = User {
             id = 1

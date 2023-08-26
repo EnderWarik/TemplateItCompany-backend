@@ -23,7 +23,7 @@ fun Application.configureSecurity()
 
 
         }
-        jwt("only-Admin") {
+        jwt("only-admin") {
             realm = jwtManager.jwtRealm
             verifier(jwtManager.verifierToken())
             validate { credential -> jwtManager.validateAdminToken(credential) }

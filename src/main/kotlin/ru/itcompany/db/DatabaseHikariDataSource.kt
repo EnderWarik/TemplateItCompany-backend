@@ -16,12 +16,14 @@ class DatabaseHikariDataSource(config: ApplicationConfig)
         val host = config.property("ktor.storage.host").getString()
         val port = config.property("ktor.storage.port").getString()
         val dbFilePath = config.propertyOrNull("ktor.storage.dbFilePath")?.getString()
+        val tableName = config.propertyOrNull("ktor.storage.tableName")?.getString()
         val driver = config.property("ktor.storage.driver").getString()
         val jdbcURL = " jdbc:postgresql://" +
                 host +
                 ":" +
                 port +
-                "/IT_company" +
+                "/" +
+                tableName +
                 (dbFilePath?.let {
                     File(it).canonicalFile.absolutePath
                 } ?: "")

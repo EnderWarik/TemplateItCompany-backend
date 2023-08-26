@@ -20,9 +20,29 @@ fun Route.appealController()
     val service: AppealService by inject()
     val mapper: AppealMapper by inject()
     val objectMapper: ObjectMapper by inject()
-    authenticate("auth-jwt") {
-        route("/appeals")
+    route("/appeals")
+    {
+        authenticate("only-admin")
         {
+            put("/update/{id}")
+            {
+                val id = call.parameters["id"]?.toLong()
+                if (id != null)
+                {
+                    service.update(
+                        id,
+                        mapper.toUpdateStatusArgument(call.receive<UpdateAppealDto>())
+                    ).let {
+                        call.respond(objectMapper.writeValueAsString(it))
+                    }
+                } else
+                {
+                    call.respond(HttpStatusCode.BadRequest)
+                }
+            }
+        }
+        authenticate("auth-jwt") {
+
             get()
             {
                 service.getAll().let {
@@ -47,22 +67,7 @@ fun Route.appealController()
                 }
 
             }
-            put("/update/{id}")
-            {
-                val id = call.parameters["id"]?.toLong()
-                if (id != null)
-                {
-                    service.update(
-                        id,
-                        mapper.toUpdateStatusArgument(call.receive<UpdateAppealDto>())
-                    ).let {
-                        call.respond(objectMapper.writeValueAsString(it))
-                    }
-                } else
-                {
-                    call.respond(HttpStatusCode.BadRequest)
-                }
-            }
+
             delete("/delete/{id}")
             {
                 val id = call.parameters["id"]?.toLong()
